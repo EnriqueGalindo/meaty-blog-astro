@@ -1,10 +1,30 @@
-# Astro Starter Kit: Minimal
+# Meaty Blog (Astro)
+
+Astro + Markdown rebuild of the Meaty Blog. Scaffolded under **MEAT-9** with secret-leak and
+supply-chain prevention baked in from the first commit.
+
+## 🔧 Setup (fresh clone)
 
 ```sh
-pnpm create astro@latest -- --template minimal
+brew install gitleaks   # required — the pre-commit hook fails closed without it
+fnm use                 # Node pinned via .nvmrc (or: nvm use)
+corepack enable         # activates the pnpm version pinned in package.json
+pnpm install            # also self-wires the gitleaks pre-commit hook via `prepare`
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The `prepare` script runs `git config core.hooksPath .githooks` on install. If you skip
+`pnpm install`, wire it manually with that same command.
+
+## 🔒 Security guardrails
+
+- **pnpm** (not npm): dependency lifecycle scripts are off by default; only `esbuild`/`sharp`
+  are allowlisted in `pnpm-workspace.yaml` (`allowBuilds`). `minimumReleaseAge` enforces a 24h
+  cooldown before any newly published version resolves.
+- **Pre-commit secret scan**: `.githooks/pre-commit` runs `gitleaks` on staged changes and
+  **fails closed** if gitleaks is missing.
+- **CI** (`.github/workflows/ci.yml`): full-history gitleaks scan + frozen-lockfile build.
+- **Never commit `.env`** — `.gitignore` covers `.env` and `.env.*`; use `.env.example` as the
+  template. GitHub push protection + secret scanning are enabled on the remote.
 
 ## 🚀 Project Structure
 
