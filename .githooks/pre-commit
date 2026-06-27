@@ -1,0 +1,16 @@
+#!/bin/sh
+# Secret-leak prevention (MEAT-9). Native git hook — deliberately NOT husky/
+# lefthook, so the security layer carries no npm dependency of its own.
+# Wired via `git config core.hooksPath .githooks` (run by the `prepare` script
+# on a fresh `pnpm install`, or manually).
+
+# Fail CLOSED: if gitleaks is missing we refuse the commit rather than silently
+# allowing it through.
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "✖ gitleaks is not installed — cannot scan staged changes for secrets."
+  echo "  Install it:  brew install gitleaks   (see README)"
+  echo "  Bypass only if you are certain:  git commit --no-verify"
+  exit 1
+fi
+
+exec gitleaks git --pre-commit --staged --redact --verbose

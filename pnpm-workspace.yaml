@@ -1,0 +1,15 @@
+# pnpm supply-chain hardening (pnpm 11). See MEAT-9.
+# Lifecycle (postinstall) scripts are NOT run by default in pnpm 10+; only the
+# packages listed under `allowBuilds` are permitted to run build scripts.
+allowBuilds:
+  esbuild: true
+  sharp: true
+
+# Refuse to resolve any dependency version published less than this many minutes
+# ago (1440 = 24h). Most malicious package versions are caught and yanked within
+# hours, so a 1-day cooldown blocks the typical npm supply-chain attack window.
+# (This is already the pnpm 11 default; pinned explicitly as documentation.)
+minimumReleaseAge: 1440
+
+# Packages allowed to bypass the cooldown — use ONLY for urgent security hotfixes.
+minimumReleaseAgeExclude: []
