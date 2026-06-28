@@ -45,6 +45,13 @@ jobs:
         run: corepack enable
       - name: Install (frozen lockfile)
         run: pnpm install --frozen-lockfile
+      # Type/diagnostic gate. Runs the content loader (needs ADC, set up above),
+      # so it stays in this job after auth + install. Fails fast before the build
+      # to catch type regressions that `astro build` would not (MEAT-18).
+      - name: Type check
+        run: pnpm exec astro check
+        env:
+          GCS_CONTENT_BUCKET: meatyblog-content
       - name: Build
         run: pnpm build
         env:
