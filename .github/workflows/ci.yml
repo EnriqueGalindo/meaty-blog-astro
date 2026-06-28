@@ -26,14 +26,26 @@ jobs:
   build:
     name: Build (Node from .nvmrc, pnpm frozen install)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required for keyless Workload Identity Federation
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+      # Keyless auth to GCP (no service-account key). The build's content loader
+      # reads post markdown from the private GCS bucket via ADC. See MEAT-17.
+      - name: Authenticate to Google Cloud (Workload Identity Federation)
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: meatyblog
+          workload_identity_provider: projects/200509562639/locations/global/workloadIdentityPools/github-pool/providers/github-provider
       - name: Enable Corepack (activates pinned pnpm)
         run: corepack enable
       - name: Install (frozen lockfile)
         run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm build
+        env:
+          GCS_CONTENT_BUCKET: meatyblog-content
