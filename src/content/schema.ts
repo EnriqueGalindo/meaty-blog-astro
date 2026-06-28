@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'astro/zod';
 
 /**
  * Blog post frontmatter schema (MEAT-17).
@@ -19,11 +19,11 @@ export const postSchema = z.object({
   date: z.coerce.date(),
   description: z.string(),
   slug: z.string(),
-  heroImage: z.string().url(),
+  heroImage: z.url(),
   heroImageAlt: z.string(),
   draft: z.boolean().default(false),
   seoTitle: z.string().optional(),
-  ogImage: z.string().url().optional(),
+  ogImage: z.url().optional(),
 });
 
 export type Post = z.infer<typeof postSchema>;
