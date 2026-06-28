@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Meaty Blog">
+  <!-- Marbled Database — the Meaty Blog icon. DB cylinder rendered as a cut of
+       meat (meat-red body, cream marbling). One-color: recolor fill + strokes. -->
+  <title>Meaty Blog</title>
+  <rect x="24" y="36" width="72" height="48" fill="#9e2b25"/>
+  <ellipse cx="60" cy="36" rx="36" ry="13" fill="#9e2b25"/>
+  <ellipse cx="60" cy="84" rx="36" ry="13" fill="#9e2b25"/>
+  <ellipse cx="60" cy="36" rx="36" ry="13" fill="none" stroke="#f4ece0" stroke-width="2.6"/>
+  <path d="M26,61 q17,-7 34,0 t34,0" fill="none" stroke="#f4ece0" stroke-width="3.4"/>
+  <path d="M26,69 q17,-7 34,0 t34,0" fill="none" stroke="#f4ece0" stroke-width="3.4"/>
+</svg>

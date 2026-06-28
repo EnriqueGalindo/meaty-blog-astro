@@ -63,11 +63,26 @@ Weights `--fw-regular…--fw-black` (400–800). Tracking `--tracking-{tight,wid
 
 `--measure 720px` (reading column ≈70ch) · `--container 1080px` · `--container-wide 1000px`.
 
-## Brand assets (separate from this file)
+## Brand assets
 
-- **Logo:** marbled-DB icon → inside inspection stamp (**MEATY BLOG / PRIME CUTS**) → Oswald wordmark.
-- **End-of-article stamp:** "WELL DONE / THANKS FOR READING".
-- One-color reproducible in meat / ink / cream-reversed. (SVG assets tracked separately; favicon/OG = D2.)
+SVG masters live in [`/public/brand/`](../../public/brand/) (served as static URLs):
+
+| File | Use |
+|------|-----|
+| `/favicon.svg` | browser tab (marbled-DB icon, bolder strokes for small sizes) |
+| `brand/logo-icon.svg` | standalone icon (avatar, inline marks) |
+| `brand/logo-stamp.svg` | inspection-stamp lockup — **MEATY BLOG / PRIME CUTS** (header, sign-off) |
+| `brand/logo-stamp-reversed.svg` | same, cream-on-transparent for dark surfaces |
+| `brand/stamp-well-done.svg` | end-of-article "WELL DONE / THANKS FOR READING" (tilt ~-8° when placing) |
+| `brand/og-default.svg` | OG card master (1200×630) |
+
+One-color reproducible in meat / ink / cream-reversed.
+
+⚠️ **Raster outputs still needed (no rasterizer on the build box):** PNG export of
+`og-default.svg` → `og-default.png` (social platforms need raster), a multi-size
+`favicon.ico` regenerated from the new icon (current `.ico` is the old default), and
+`apple-touch-icon.png` (180×180). The stamp/OG SVGs use **live Oswald/Bitter text**
+(not outlined) — rasterize with those fonts installed, or outline them first.
 
 ## Usage
 
