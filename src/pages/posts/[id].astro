@@ -1,0 +1,65 @@
+---
+// Single post — /posts/<slug>/ (MEAT-18).
+//
+// Routes on the collection entry `id` (== slug; MEAT-17). Single-segment param
+// fails loud if a slug ever contains a slash, surfacing bad data rather than
+// silently 404ing (plan v2, fix #5). Drafts are excluded in prod via the same
+// getPublishedPosts() predicate as the home list, so no orphan draft page is
+// ever built (plan v2, fix #1).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { title, date, description, heroImage, heroImageAlt, seoTitle, ogImage } =
+  entry.data;
+
+// Render the body from the Content Layer's stored HTML (`entry.rendered.html`,
+// populated by the GCS loader's renderMarkdown). We demote any body <h1> to <h2>
+// so the page keeps exactly ONE <h1> (the frontmatter title below), even when a
+// migrated body still opens with `# Title` (plan v2, fix #3). Astro 7's default
+// Satteri Markdown processor is native and runs no remark/rehype JS plugins, so
+// this guard lives at the render layer rather than in the Markdown pipeline.
+// Heading tags don't nest, so a tag-name rewrite is safe. MEAT-12 should also
+// strip/demote leading body H1 at the migration source.
+const bodyHtml = (entry.rendered?.html ?? '').replace(
+  /<(\/?)h1(\b[^>]*)>/gi,
+  '<$1h2$2>'
+);
+
+const fmt = new Intl.DateTimeFormat('en-US', {
+  dateStyle: 'long',
+  timeZone: 'UTC',
+});
+---
+
+<BaseLayout
+  title={seoTitle ?? title}
+  description={description}
+  ogTitle={title}
+  ogImage={ogImage ?? heroImage}
+  ogImageAlt={heroImageAlt}
+  ogType="article"
+>
+  <article>
+    <img
+      src={heroImage}
+      alt={heroImageAlt}
+      width="1200"
+      height="630"
+      loading="eager"
+      decoding="async"
+    />
+    {/* The page's single H1 comes from frontmatter; body h1s are demoted above. */}
+    <h1>{title}</h1>
+    <time datetime={date.toISOString().slice(0, 10)}>{fmt.format(date)}</time>
+    <Fragment set:html={bodyHtml} />
+  </article>
+</BaseLayout>
