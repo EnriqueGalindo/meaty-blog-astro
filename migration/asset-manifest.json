@@ -1,0 +1,328 @@
+[
+  {
+    "id": "6HY9tRIhOSX33mwHUzmeI8",
+    "filename": "5DC1C8D5-3A8E-4038-9177-828AA520DC25.png",
+    "title": "four hour work day banner",
+    "description": "",
+    "alt": "four hour work day banner",
+    "contentType": "image/png",
+    "bytes": 2176801,
+    "referencedBy": [
+      "seo:The Four Hour Workday Is Misguided"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "39QhurtXDq4LP9nNIforyV",
+    "filename": "Background.png",
+    "title": "Banner Image",
+    "description": "",
+    "alt": "Banner Image",
+    "contentType": "image/png",
+    "bytes": 304912,
+    "referencedBy": [
+      "heroSection:Meaty Blog",
+      "websiteSeo:Enrique Galindo"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "01nQQzRisbWEKfXGlds1Wi",
+    "filename": "DALL_E_2025-03-05_00.16.27_-_A_visually_engaging_image_for_a_blog_post_about_setting_up_PiVPN_on_a_Raspberry_Pi._The_image_.webp",
+    "title": "PiVPN image",
+    "description": "",
+    "alt": "PiVPN image",
+    "contentType": "image/webp",
+    "bytes": 134042,
+    "referencedBy": [
+      "blogPost:Ditch Cloud Services: Build Your Own VPN with PiVPN & WireGuard",
+      "seo:Ditch Cloud Services: Build Your Own VPN with PiVPN & WireGuard"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "7pqBDu5eQ1qccaO8LCKHnH",
+    "filename": "IMG_6220.jpg",
+    "title": "IMG 6220",
+    "description": "",
+    "alt": "IMG 6220",
+    "contentType": "image/jpeg",
+    "bytes": 563160,
+    "referencedBy": [
+      "aboutTheAuthor:Enrique Galindo"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "6X7ACiLqGBM2pXlRq19HjW",
+    "filename": "blogset1a.jpg",
+    "title": "four hour workday banner",
+    "description": "",
+    "alt": "four hour workday banner",
+    "contentType": "image/jpeg",
+    "bytes": 5069365,
+    "referencedBy": [
+      "blogPost:The Four Hour Workday Is Misguided"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "7I5w00OefcYVnBSEKhMbLT",
+    "filename": "blogset1b.jpg",
+    "title": "four hour workday body img 1",
+    "description": "",
+    "alt": "four hour workday body img 1",
+    "contentType": "image/jpeg",
+    "bytes": 7317928,
+    "referencedBy": [
+      "blogPost:The Four Hour Workday Is Misguided"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "6efmMtEH3wNh9qT0yKYQ4C",
+    "filename": "blogset1c.jpg",
+    "title": "four hour workday body img 2",
+    "description": "",
+    "alt": "four hour workday body img 2",
+    "contentType": "image/jpeg",
+    "bytes": 6087631,
+    "referencedBy": [
+      "blogPost:The Four Hour Workday Is Misguided"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "4ZEA2Gm98Nlcz97jmljCYC",
+    "filename": "blogset2a2.jpg",
+    "title": "Don't follow your dreams header",
+    "description": "",
+    "alt": "Don't follow your dreams header",
+    "contentType": "image/jpeg",
+    "bytes": 12292660,
+    "referencedBy": [
+      "blogPost:Don't Follow Your Dreams",
+      "seo:Don't Follow Your Dreams"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "5Ch2B3XncUbKPqlRPMjVF3",
+    "filename": "blogset2b.jpg",
+    "title": "Don't Follow Your Dreams Body Img",
+    "description": "",
+    "alt": "Don't Follow Your Dreams Body Img",
+    "contentType": "image/jpeg",
+    "bytes": 2797389,
+    "referencedBy": [
+      "blogPost:Don't Follow Your Dreams"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "7oekaNJUpahfCR8Exdju0b",
+    "filename": "blogset3a.jpg",
+    "title": "revenge sleep",
+    "description": "",
+    "alt": "revenge sleep",
+    "contentType": "image/jpeg",
+    "bytes": 7478757,
+    "referencedBy": [
+      "blogPost:Revenge Bedtime Procrastination",
+      "seo:Revenge Bedtime Procrastination"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "2lE8afBVyXVOlKjSieSz2X",
+    "filename": "blogset3b.jpg",
+    "title": "Revenge Bedtime Procrastination",
+    "description": "",
+    "alt": "Revenge Bedtime Procrastination",
+    "contentType": "image/jpeg",
+    "bytes": 8377219,
+    "referencedBy": [
+      "blogPost:Revenge Bedtime Procrastination"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "5IiR0K93SDzmy0H9ZRlPyA",
+    "filename": "blogset4a.png",
+    "title": "Friends suck",
+    "description": "",
+    "alt": "Friends suck",
+    "contentType": "image/png",
+    "bytes": 6605893,
+    "referencedBy": [
+      "blogPost:Friends Suck and Making them is Worse",
+      "seo:Friends Suck and Making them is Worse"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "D7mJ4oor0Q9nGeufYrbDm",
+    "filename": "blogset4b.png",
+    "title": "Friends suck inline",
+    "description": "",
+    "alt": "Friends suck inline",
+    "contentType": "image/png",
+    "bytes": 11075609,
+    "referencedBy": [
+      "blogPost:Friends Suck and Making them is Worse"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "Z0houT9h3QY0jg7Uy3ecQ",
+    "filename": "blogset5a.png",
+    "title": "self help",
+    "description": "",
+    "alt": "self help",
+    "contentType": "image/png",
+    "bytes": 4330960,
+    "referencedBy": [
+      "blogPost:Burn Your Self Help Books Before They Burn You",
+      "seo:Burn Your Self Help Books Before They Burn You"
+    ],
+    "demoRefsOnly": [],
+    "status": "referenced"
+  },
+  {
+    "id": "76nsKzpGH5WJa0gbCTwqhS",
+    "filename": "filipe-coimbra-zsBarK_nW1M-unsplash.jpeg",
+    "title": "7",
+    "description": "",
+    "alt": "7",
+    "contentType": "image/jpeg",
+    "bytes": 1368556,
+    "referencedBy": [],
+    "demoRefsOnly": [
+      "seo:Post 007: The Failure of Will Power"
+    ],
+    "status": "demo"
+  },
+  {
+    "id": "vRBPoIl3rjSLRFp5EnlcG",
+    "filename": "random-img.jpg",
+    "title": "Demo Social Card Image",
+    "description": "For testing",
+    "alt": "For testing",
+    "contentType": "image/jpeg",
+    "bytes": 14352,
+    "referencedBy": [],
+    "demoRefsOnly": [
+      "seo:Demo Blog Post"
+    ],
+    "status": "demo"
+  },
+  {
+    "id": "7HxnR9NnEE72JnInvCAUVg",
+    "filename": "1.jfif",
+    "title": "Cute Picture",
+    "description": "",
+    "alt": "Cute Picture",
+    "contentType": "image/jpeg",
+    "bytes": 354177,
+    "referencedBy": [],
+    "demoRefsOnly": [],
+    "status": "orphaned"
+  },
+  {
+    "id": "50yZ6hA6T6zWBzuFLe1gWr",
+    "filename": "2.jfif",
+    "title": "2",
+    "description": "",
+    "alt": "2",
+    "contentType": "image/jpeg",
+    "bytes": 41636,
+    "referencedBy": [],
+    "demoRefsOnly": [],
+    "status": "orphaned"
+  },
+  {
+    "id": "7jkH9EtFN82wBxO5PIBFnz",
+    "filename": "3.jfif",
+    "title": "3",
+    "description": "",
+    "alt": "3",
+    "contentType": "image/jpeg",
+    "bytes": 85807,
+    "referencedBy": [],
+    "demoRefsOnly": [],
+    "status": "orphaned"
+  },
+  {
+    "id": "1Ml1PxTrx0pZ7t666ZIQeh",
+    "filename": "4.jfif",
+    "title": "4",
+    "description": "",
+    "alt": "4",
+    "contentType": "image/jpeg",
+    "bytes": 125581,
+    "referencedBy": [],
+    "demoRefsOnly": [],
+    "status": "orphaned"
+  },
+  {
+    "id": "7vMEgyewPetTobLSQ71R3m",
+    "filename": "5.jfif",
+    "title": "5",
+    "description": "",
+    "alt": "5",
+    "contentType": "image/jpeg",
+    "bytes": 83668,
+    "referencedBy": [],
+    "demoRefsOnly": [],
+    "status": "orphaned"
+  },
+  {
+    "id": "249hOXD1Guc42AC8S99VBD",
+    "filename": "6.jfif",
+    "title": "6",
+    "description": "",
+    "alt": "6",
+    "contentType": "image/jpeg",
+    "bytes": 77502,
+    "referencedBy": [],
+    "demoRefsOnly": [],
+    "status": "orphaned"
+  },
+  {
+    "id": "27O6pwkzfbbE0g1s5lIV0",
+    "filename": "PFPDrawnVer.png",
+    "title": "Author",
+    "description": "",
+    "alt": "Author",
+    "contentType": "image/png",
+    "bytes": 2639469,
+    "referencedBy": [],
+    "demoRefsOnly": [],
+    "status": "orphaned"
+  },
+  {
+    "id": "5kkrhyRQPNE5N3wh3965rN",
+    "filename": "random_pro_pic.png",
+    "title": "Random Person's Profile Picture",
+    "description": "",
+    "alt": "Random Person's Profile Picture",
+    "contentType": "image/png",
+    "bytes": 130425,
+    "referencedBy": [],
+    "demoRefsOnly": [],
+    "status": "orphaned"
+  }
+]
