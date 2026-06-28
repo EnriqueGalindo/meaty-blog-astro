@@ -1,0 +1,148 @@
+/* ============================================================================
+   Meaty Blog — Design Tokens  (MEAT-10 / D1)
+   "Butcher's Counter" — a data-engineering blog, light single theme.
+
+   Single source of truth for color, type, spacing, and the handful of
+   signature treatments (block shadow, awning, stamp). Page/component CSS
+   should consume these variables, not hard-code values.
+
+   Voice: "getting into the meat of it."  Brand: cream butcher paper +
+   meat-red, condensed signage type, an inspection-stamp logo (marbled DB).
+
+   ACCESSIBILITY: every text/background pair below meets WCAG 2.1 AA.
+   Measured ratios are noted inline. Dark mode was intentionally dropped
+   (see MEAT-10, 2026-06-28); the chalkboard is a component surface, not a theme.
+   ========================================================================= */
+
+:root {
+  /* --- Raw palette (don't reference these directly in components) --------- */
+  --c-paper:        #f4ece0;  /* butcher-paper cream */
+  --c-paper-2:      #ece1d0;  /* raised surface / cards */
+  --c-ink:          #2b211c;  /* warm near-black */
+  --c-ink-soft:     #5c4e44;  /* muted text */
+  --c-meat:         #9e2b25;  /* primary red */
+  --c-meat-deep:    #7a1f1c;  /* hover / pressed */
+  --c-stamp-green:  #3f6b4e;  /* secondary accent (blockquote, "fresh") */
+  --c-tag-gold:     #e8b04b;  /* ticket / highlight accent */
+  --c-line:         #d8c9b4;  /* hairlines, dashed rules, block shadow */
+  --c-board:        #232a24;  /* chalkboard slate (homepage hero) */
+  --c-chalk:        #efe7d6;  /* chalk text on board */
+  --c-chalk-dim:    #c4bdac;  /* muted chalk on board */
+  --c-counter:      #1f1712;  /* dark counter (footer / behind sheets) */
+
+  /* --- Semantic color (use these) ---------------------------------------- */
+  --color-bg:            var(--c-paper);
+  --color-surface:       var(--c-paper-2);
+  --color-text:          var(--c-ink);        /* 13.40:1 on bg  */
+  --color-text-muted:    var(--c-ink-soft);   /*  6.82:1 on bg  */
+  --color-accent:        var(--c-meat);       /*  6.34:1 on bg  */
+  --color-accent-hover:  var(--c-meat-deep);
+  --color-accent-alt:    var(--c-stamp-green);/*  5.23:1 on bg  */
+  --color-highlight:     var(--c-tag-gold);   /* decorative + AA on dark only */
+  --color-border:        var(--c-line);
+  --color-on-accent:     var(--c-paper);      /*  6.34:1 on meat, 13.40:1 on ink */
+
+  /* Inverse / dark surfaces (header strip, footer, CTA, code) */
+  --color-inverse-bg:    var(--c-ink);
+  --color-inverse-text:  var(--c-paper);      /* 13.40:1 */
+  --color-counter:       var(--c-counter);
+
+  /* Chalkboard surface (homepage "Today's Menu" hero only) */
+  --color-board-bg:          var(--c-board);
+  --color-board-text:        var(--c-chalk);      /* 11.95:1 */
+  --color-board-text-muted:  var(--c-chalk-dim);  /*  7.86:1 */
+  --color-board-accent:      var(--c-tag-gold);   /*  7.52:1 */
+
+  /* Code block syntax (dark panel) — all AA on --code-bg */
+  --code-bg:        #1c1611;
+  --code-text:      #e9e0d2;  /* 13.70:1 */
+  --code-keyword:   #e8a3a0;  /*  8.68:1 */
+  --code-function:  #9cc59c;  /*  9.28:1 */
+  --code-string:    #d8b878;  /*  9.42:1 */
+  --code-comment:   #978b7c;  /*  5.37:1 */
+
+  /* --- Typography -------------------------------------------------------- */
+  /* Roles: serif = reading + article titles · sign = signage/nav/labels/tags
+     · mono = code + meta · chalk = chalkboard accents ONLY (never body).   */
+  --font-serif: 'Bitter', Georgia, 'Times New Roman', serif;
+  --font-sign:  'Oswald', 'Arial Narrow', sans-serif;
+  --font-mono:  'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --font-chalk: 'Caveat', 'Comic Sans MS', cursive;
+
+  /* Modular-ish scale (rem @ 16px root). Names map to use, not size. */
+  --fs-label:   0.6875rem;  /* 11px — tags, barcode label, eyebrows  */
+  --fs-meta:    0.75rem;    /* 12px — mono meta, dates, nav          */
+  --fs-small:   0.875rem;   /* 14px — captions, fine print           */
+  --fs-body:    1.1875rem;  /* 19px — reading body                   */
+  --fs-lead:    1.25rem;    /* 20px — dek / standfirst               */
+  --fs-h3:      1.4375rem;  /* 23px */
+  --fs-h2:      1.875rem;   /* 30px */
+  --fs-h1:      2.875rem;   /* 46px — post title / page h1           */
+  --fs-display: 3.75rem;    /* 60px — home hero / chalkboard script  */
+
+  --lh-tight:   1.05;   /* display / h1            */
+  --lh-snug:    1.2;    /* h2 / h3                 */
+  --lh-normal:  1.5;    /* UI / lists              */
+  --lh-body:    1.75;   /* long-form reading       */
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --fw-black:    800;
+
+  --tracking-tight:  -0.01em;  /* large headings   */
+  --tracking-normal: 0;
+  --tracking-wide:   0.08em;   /* mono labels      */
+  --tracking-sign:   0.12em;   /* uppercase signage */
+
+  /* --- Spacing (4px base ramp) ------------------------------------------- */
+  --space-1: 0.25rem;  /*  4 */
+  --space-2: 0.5rem;   /*  8 */
+  --space-3: 0.75rem;  /* 12 */
+  --space-4: 1rem;     /* 16 */
+  --space-5: 1.5rem;   /* 24 */
+  --space-6: 2rem;     /* 32 */
+  --space-7: 3rem;     /* 48 */
+  --space-8: 4rem;     /* 64 */
+  --space-9: 6rem;     /* 96 */
+
+  /* --- Radius ------------------------------------------------------------ */
+  --radius-sm:    2px;   /* stamps, tags, buttons (kept sharp)   */
+  --radius-md:    4px;
+  --radius-lg:    6px;   /* cards, code blocks, banners          */
+  --radius-pill:  999px;
+  --radius-round: 50%;
+
+  /* --- Borders ----------------------------------------------------------- */
+  --border-hairline: 1px;  /* rules, dashed separators            */
+  --border-rule:     2px;  /* standard ink outline (cards/tags)   */
+  --border-heavy:    3px;  /* awning underline, header/footer divs */
+
+  /* --- Shadows (the offset "block" shadow is signature) ------------------ */
+  --shadow-block:     4px 4px 0 var(--color-border); /* cards, banners      */
+  --shadow-block-ink: 3px 3px 0 var(--color-ink);    /* buttons (press in)  */
+  --shadow-lift:      0 14px 50px rgba(0, 0, 0, 0.5);/* chalkboard / sheet  */
+
+  /* --- Motion ------------------------------------------------------------ */
+  --ease:         cubic-bezier(0.2, 0, 0, 1);
+  --duration:     0.15s;
+
+  /* --- Layout ------------------------------------------------------------ */
+  --measure:      720px;   /* reading column (~70ch)              */
+  --container:    1080px;  /* max page width                      */
+  --container-wide: 1000px;
+
+  /* --- Brand bits -------------------------------------------------------- */
+  /* Striped deli awning — drop as a background on a short bar. */
+  --awning-stripe: repeating-linear-gradient(
+    90deg, var(--color-accent) 0 28px, var(--color-bg) 28px 56px);
+  /* Faint butcher-paper grain — layer under page bg. */
+  --paper-grain: repeating-linear-gradient(
+    90deg, rgba(0,0,0,0.012) 0 2px, transparent 2px 4px);
+}
+
+/* Respect reduced-motion globally. */
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration: 0s; }
+}
