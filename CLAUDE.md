@@ -51,6 +51,24 @@ pnpm sync:content   # force a fresh GCS→local content sync
 > All of dev/build/check pull from GCS, so they need ADC (above). `astro check`
 > on its own won't see content unless a sync has run — use `pnpm check`.
 
+## Deploy (MEAT-33 — Firebase Hosting)
+
+Static `dist/` is served by **Firebase Hosting** (project `meatyblog`, site
+`meatyblog.web.app`); config in `firebase.json` (`public: dist`) + `.firebaserc`.
+Deploy is **manual** for now (CI auto-deploy is F5/MEAT-37):
+
+```bash
+pnpm build                                   # sync + build + prune
+GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/application_default_credentials.json \
+  pnpm dlx firebase-tools deploy --only hosting --project meatyblog
+```
+
+Keyless: firebase-tools authenticates via ADC (no service-account key, no
+`firebase login`), satisfying the org no-SA-keys policy. Redirects (F2/MEAT-34)
+and the `meaty.blog` custom domain / DNS cutover (F3/MEAT-35) are separate cards;
+`og:image` already uses the final `https://meaty.blog` origin (set via Astro
+`site`), so OG images resolve only after the DNS cutover.
+
 > Note: in non-interactive shells, node/pnpm may not be on PATH. Node is managed
 > by **fnm** (`~/.local/share/fnm/node-versions/v22.23.1/installation/bin`);
 > pnpm runs via `corepack pnpm …`.
