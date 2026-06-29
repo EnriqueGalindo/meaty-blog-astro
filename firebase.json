@@ -3,6 +3,33 @@
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": false,
-    "trailingSlash": true
+    "trailingSlash": true,
+    "redirects": [
+      {
+        "source": "/posts/Burn Your Self Help Books Before They Burn You",
+        "destination": "/posts/burn-your-self-help-books/",
+        "type": 301
+      },
+      {
+        "source": "/posts/Friends Suck and Making them is Worse",
+        "destination": "/posts/friends-suck-and-making-them-is-worse/",
+        "type": 301
+      },
+      {
+        "source": "/posts/Revenge Bedtime Procrastination",
+        "destination": "/posts/revenge-bedtime-procrastination/",
+        "type": 301
+      },
+      {
+        "source": "/posts/Don't Follow Your Dreams",
+        "destination": "/posts/dont-follow-your-dreams/",
+        "type": 301
+      },
+      {
+        "source": "/posts/The Four Hour Workday Is Misguided",
+        "destination": "/posts/four-hour-workday-is-misguided/",
+        "type": 301
+      }
+    ]
   }
 }
