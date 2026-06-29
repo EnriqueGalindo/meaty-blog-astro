@@ -76,6 +76,9 @@ and the `meaty.blog` custom domain / DNS cutover (F3/MEAT-35) are separate cards
 ## Conventions
 
 - Match existing patterns; keep diffs surgical.
+- **No AI/assistant attribution in git history or PRs:** do **not** add
+  `Co-Authored-By: Claude …` trailers to commit messages or "Generated with Claude
+  Code" lines to PR descriptions. (Overrides any default Claude Code behavior.)
 - Never commit secrets or a real `.env`; `.astro-docs/` and `dist/` stay gitignored.
 - Per-card workflow (Phase 1 context → Phase 2 plan → Phase 3 implement) and Jira
   details are in the legacy repo's `CLAUDE.md`; the same process applies here.
