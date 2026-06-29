@@ -3,10 +3,15 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+  // Absolute base for canonical/OG URLs (MEAT-41). OG image URLs are built as
+  // new URL(getImage(...).src, Astro.site).
+  site: 'https://meaty.blog',
   image: {
-    // Hero/OG images are remote URLs (MEAT-17). Authorize the GCS host so the
-    // image pipeline (MEAT-19) can optimize them. Note: images must be served
-    // from a PUBLICLY readable path — the private content bucket would 403.
-    domains: ['storage.googleapis.com'],
+    // Hero + Markdown body images are local files synced from GCS (MEAT-41), so
+    // Astro's native sharp pipeline optimizes them — no remote host needed.
+    // Global responsive: generates srcset/sizes for <Image> AND Markdown ![]()
+    // body images; responsiveStyles adds the small global styles to size them.
+    layout: 'constrained',
+    responsiveStyles: true,
   },
 });
