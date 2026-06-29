@@ -1,0 +1,45 @@
+{
+  "$schema-note": "Canonical old->new 301 redirect map for the Gatsby/Contentful -> Astro migration. Source of truth for F2/MEAT-34 (Firebase Hosting `redirects`). See redirect-plan.md for the verified config form and hand-off.",
+  "producedBy": "MEAT-14 / B3",
+  "consumedBy": "MEAT-34 / F2",
+  "redirectType": 301,
+  "scope": "Only the 5 renamed /posts/* slugs. setup-pivpn-wireguard-raspberry-pi was authored clean and needs no redirect. No other indexed paths existed (legacy had no sitemap).",
+  "notes": [
+    "`from` is the decoded legacy path; `fromEncoded` is the browser/URL-encoded form (spaces as %20).",
+    "Destinations use the trailing-slash canonical form to match firebase.json `trailingSlash: true`.",
+    "dont-follow-your-dreams: the apostrophe appears either literally (') or percent-encoded (%27) in real links; the verified regex source in redirect-plan.md matches both.",
+    "Old paths must match with and without a trailing slash; matching is case-sensitive to the indexed casing shown."
+  ],
+  "redirects": [
+    {
+      "from": "/posts/Burn Your Self Help Books Before They Burn You",
+      "fromEncoded": "/posts/Burn%20Your%20Self%20Help%20Books%20Before%20They%20Burn%20You",
+      "to": "/posts/burn-your-self-help-books/",
+      "status": 301
+    },
+    {
+      "from": "/posts/Friends Suck and Making them is Worse",
+      "fromEncoded": "/posts/Friends%20Suck%20and%20Making%20them%20is%20Worse",
+      "to": "/posts/friends-suck-and-making-them-is-worse/",
+      "status": 301
+    },
+    {
+      "from": "/posts/Revenge Bedtime Procrastination",
+      "fromEncoded": "/posts/Revenge%20Bedtime%20Procrastination",
+      "to": "/posts/revenge-bedtime-procrastination/",
+      "status": 301
+    },
+    {
+      "from": "/posts/Don't Follow Your Dreams",
+      "fromEncoded": "/posts/Don't%20Follow%20Your%20Dreams",
+      "to": "/posts/dont-follow-your-dreams/",
+      "status": 301
+    },
+    {
+      "from": "/posts/The Four Hour Workday Is Misguided",
+      "fromEncoded": "/posts/The%20Four%20Hour%20Workday%20Is%20Misguided",
+      "to": "/posts/four-hour-workday-is-misguided/",
+      "status": 301
+    }
+  ]
+}
