@@ -2,6 +2,8 @@
 dist/
 # generated types
 .astro/
+# firebase deploy cache (MEAT-33)
+.firebase/
 
 # content synced from GCS at build time (MEAT-41): markdown + co-located images
 # are materialized locally by scripts/sync-content.mjs and never committed.
