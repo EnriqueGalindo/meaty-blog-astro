@@ -3,6 +3,10 @@ dist/
 # generated types
 .astro/
 
+# content synced from GCS at build time (MEAT-41): markdown + co-located images
+# are materialized locally by scripts/sync-content.mjs and never committed.
+src/content/posts/
+
 # dependencies
 node_modules/
 

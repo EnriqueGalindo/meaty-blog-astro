@@ -22,20 +22,34 @@ from training data.
 ## Stack
 
 - **Astro 7** (SSG), **pnpm** (via corepack; `packageManager` pins the version).
-- Content: `posts` collection (`src/content.config.ts`) loaded from private GCS
-  by `src/loaders/gcs-markdown.ts`; schema in `src/content/schema.ts`
-  (`id === slug`; per-post SEO: `seoTitle`→`title`, `description`, `ogImage`→`heroImage`).
-- Build/`astro check` run the GCS loader → need GCP creds: local ADC
-  (`gcloud auth application-default login`), CI via Workload Identity Federation.
-  No service-account keys (org policy).
+- Content: `posts` collection (`src/content.config.ts`) loaded via Astro's
+  standard `glob()` over `src/content/posts/<slug>/index.md`; schema in
+  `src/content/schema.ts` (`id === slug` via `generateId`; per-post SEO:
+  `seoTitle`→`title`, `description`, `ogImage`→`heroImage`).
+- Images are **local** refs (`heroImage`/`ogImage` via the schema `image()`
+  helper; body via relative `![](./x)`) so Astro's native sharp pipeline
+  optimizes them — `sharp` is a direct dep (MEAT-41, supersedes MEAT-17's remote
+  `z.url()` model). `astro.config.mjs` sets `site` + global responsive images.
+- **Build-time GCS→local sync** (`scripts/sync-content.mjs`, MEAT-41): pulls
+  `posts/*.md` + their `assets-src/` images from private GCS into co-located
+  folders and rewrites the source's public-bucket image URLs to `./` refs
+  in-memory. Synced content (`src/content/posts/`) is **gitignored**. Keyless
+  ADC: local `gcloud auth application-default login`, CI via Workload Identity
+  Federation. No service-account keys (org policy).
+- `scripts/prune-orphan-assets.mjs` (runs after `astro build`) deletes the
+  unreferenced original hero/OG images Astro emits into `dist/_astro`.
 
 ## Commands
 
 ```bash
-pnpm dev      # dev server (drafts visible)
-pnpm build    # static build to dist/ (drafts excluded in PROD)
-pnpm exec astro check   # type/diagnostic check (also runs the loader)
+pnpm dev      # sync (--if-missing) + dev server (drafts visible)
+pnpm build    # sync + static build to dist/ + prune orphans (drafts excluded in PROD)
+pnpm check    # sync (--if-missing) + astro check (type/diagnostics)
+pnpm sync:content   # force a fresh GCS→local content sync
 ```
+
+> All of dev/build/check pull from GCS, so they need ADC (above). `astro check`
+> on its own won't see content unless a sync has run — use `pnpm check`.
 
 > Note: in non-interactive shells, node/pnpm may not be on PATH. Node is managed
 > by **fnm** (`~/.local/share/fnm/node-versions/v22.23.1/installation/bin`);
