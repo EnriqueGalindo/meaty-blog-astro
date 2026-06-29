@@ -1,0 +1,92 @@
+/* ============================================================================
+   Meaty Blog — global base layer (MEAT-23 / D3)
+
+   The first stylesheet on every page (imported once in BaseLayout). Pulls in the
+   D1 design tokens, then applies a thin document base: reset, body type/surface,
+   links, layout widths, and a surface-aware focus ring. Component/page visuals
+   live in their own scoped <style> blocks.
+   ========================================================================= */
+
+@import './tokens.css';
+
+/* --- reset ----------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  background-image: var(--paper-grain);
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- layout ---------------------------------------------------------------- */
+/* Page width container and a reading-measure helper for prose. */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.measure {
+  max-width: var(--measure);
+}
+
+/* --- links ----------------------------------------------------------------- */
+/* Underlined so links are distinguishable from body text by more than color
+   (WCAG 1.4.1). Meat-red is AA on paper (6.34:1). */
+a {
+  color: var(--color-accent);
+  text-underline-offset: 0.15em;
+}
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* On dark surfaces, meat-red fails contrast — use chalk instead. */
+[data-surface='dark'] a {
+  color: var(--color-board-text);
+}
+
+/* --- focus ----------------------------------------------------------------- */
+/* Keyboard focus ring, surface-aware so it clears 3:1 on BOTH the cream paper
+   and the dark chalkboard (WCAG 2.4.7). */
+:focus-visible {
+  outline: var(--border-rule) solid var(--color-focus);
+  outline-offset: 2px;
+}
+[data-surface='dark'] :focus-visible {
+  outline-color: var(--color-board-accent);
+}
+
+/* --- skip link ------------------------------------------------------------- */
+/* WCAG 2.4.1 — first focusable element; visible only on keyboard focus. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-inverse-bg);
+  color: var(--color-inverse-text);
+  font-family: var(--font-sign);
+}
+.skip-link:focus {
+  left: 0;
+}
