@@ -36,6 +36,12 @@ const {
 
 // Canonical / og:url. Astro.url already reflects the configured `site` + path.
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+
+// Default OG card (MEAT-22): pages without their own image (home, 404) fall back
+// to the brand default. Posts pass an absolute `ogImage`; this leaves those
+// untouched. Always absolute so crawlers resolve it.
+const resolvedOgImage = ogImage ?? new URL('/og-default.png', Astro.site ?? Astro.url).href;
+const resolvedOgImageAlt = ogImageAlt ?? 'Meaty Blog — getting into the meat of it.';
 ---
 
 <!doctype html>
@@ -46,6 +52,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#9e2b25" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -58,20 +67,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content={SITE_TITLE} />
-    {
-      ogImage && (
-        <>
-          <meta property="og:image" content={ogImage} />
-          {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
-          {/* OG images are 1200×630 (MEAT-13). */}
-          <meta property="og:image:width" content="1200" />
-          <meta property="og:image:height" content="630" />
-        </>
-      )
-    }
+    {/* OG image: per-post or the brand default; always 1200×630 (MEAT-13/22). */}
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:image:alt" content={resolvedOgImageAlt} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-    {/* Twitter falls back to OG title/description, so only the card type is set. */}
-    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    {/* Twitter falls back to OG title/description; a card image is always set. */}
+    <meta name="twitter:card" content="summary_large_image" />
 
     <style>
       /* Minimal, structural-only CSS. Visual design lives in the D track. */
