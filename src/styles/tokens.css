@@ -41,6 +41,7 @@
   --color-highlight:     var(--c-tag-gold);   /* decorative + AA on dark only */
   --color-border:        var(--c-line);
   --color-on-accent:     var(--c-paper);      /*  6.34:1 on meat, 13.40:1 on ink */
+  --color-focus:         var(--c-meat);       /* focus ring, light surfaces (6.34:1 on bg; board overrides to chalk/gold) */
 
   /* Inverse / dark surfaces (header strip, footer, CTA, code) */
   --color-inverse-bg:    var(--c-ink);
@@ -64,10 +65,13 @@
   /* --- Typography -------------------------------------------------------- */
   /* Roles: serif = reading + article titles · sign = signage/nav/labels/tags
      · mono = code + meta · chalk = chalkboard accents ONLY (never body).   */
-  --font-serif: 'Bitter', Georgia, 'Times New Roman', serif;
-  --font-sign:  'Oswald', 'Arial Narrow', sans-serif;
-  --font-mono:  'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
-  --font-chalk: 'Caveat', 'Comic Sans MS', cursive;
+  /* Role → family. Each points at the Astro Fonts-API variable (MEAT-23), whose
+     value already includes the metric-optimized fallback; the literal stack here
+     is a safety net used only if that variable is ever undefined. */
+  --font-serif: var(--font-bitter, 'Bitter', Georgia, 'Times New Roman', serif);
+  --font-sign:  var(--font-oswald, 'Oswald', 'Arial Narrow', sans-serif);
+  --font-mono:  var(--font-jetbrains-mono, 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace);
+  --font-chalk: var(--font-caveat, 'Caveat', 'Comic Sans MS', cursive);
 
   /* Modular-ish scale (rem @ 16px root). Names map to use, not size. */
   --fs-label:   0.6875rem;  /* 11px — tags, barcode label, eyebrows  */

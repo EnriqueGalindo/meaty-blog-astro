@@ -1,11 +1,12 @@
 ---
-// Minimal shared layout (MEAT-18).
+// Shared layout (MEAT-18; design wired in MEAT-23/D3).
 //
-// Provides a semantic, WCAG-AA document shell and a faithful-but-minimal SEO
-// head (ported from the legacy Gatsby Seo.js): title, meta description,
-// canonical, Open Graph, and twitter:card. Visual design is deferred to the
-// D track (MEAT-10/24/25); this file deliberately ships no design CSS.
+// Provides a semantic, WCAG-AA document shell, a faithful SEO head (title, meta
+// description, canonical, Open Graph, twitter:card), the global stylesheet
+// (tokens + base layer), and the self-hosted brand webfonts.
+import { Font } from 'astro:assets';
 import { SITE_TITLE } from '../consts';
+import '../styles/global.css';
 
 interface Props {
   /** Document <title> and og:title fallback. */
@@ -76,29 +77,13 @@ const resolvedOgImageAlt = ogImageAlt ?? 'Meaty Blog — getting into the meat o
     {/* Twitter falls back to OG title/description; a card image is always set. */}
     <meta name="twitter:card" content="summary_large_image" />
 
-    <style>
-      /* Minimal, structural-only CSS. Visual design lives in the D track. */
-
-      /* WCAG 2.4.1 — skip link, visible only on keyboard focus. */
-      .skip-link {
-        position: absolute;
-        left: -9999px;
-        top: 0;
-        padding: 0.5rem 1rem;
-        background: #000;
-        color: #fff;
-      }
-      .skip-link:focus {
-        left: 0;
-        z-index: 100;
-      }
-
-      /* Keep remote hero/OG images responsive without dictating design. */
-      img {
-        max-width: 100%;
-        height: auto;
-      }
-    </style>
+    {/* Self-hosted brand webfonts (MEAT-23). Preload only the above-the-fold
+        faces: Oswald 700 (hero wordmark / signage), Bitter 400 (tagline/body),
+        Caveat 400 (chalk accent). Mono is emitted but not preloaded. */}
+    <Font cssVariable="--font-oswald" preload={[{ weight: '700' }]} />
+    <Font cssVariable="--font-bitter" preload={[{ weight: '400', style: 'normal' }]} />
+    <Font cssVariable="--font-caveat" preload={[{ weight: '400' }]} />
+    <Font cssVariable="--font-jetbrains-mono" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
