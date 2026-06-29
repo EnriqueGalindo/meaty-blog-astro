@@ -35,3 +35,6 @@ pnpm-debug.log*
 # Local cache of the Astro reference docs (sparse clone of withastro/docs).
 # On-disk reference only — never committed. See CLAUDE.md "Astro docs cache".
 .astro-docs/
+
+# D2 brand-asset OG font cache (not committed)
+scripts/.fonts/
