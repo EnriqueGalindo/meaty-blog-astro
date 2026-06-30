@@ -11,6 +11,8 @@
 //
 // About/Subscribe have no pages yet, so they render as non-interactive
 // placeholders (no dead links) until those cards land.
+import { site } from '../config/site';
+
 const path = Astro.url.pathname;
 const isHome = path === '/' || path === '';
 ---
@@ -18,7 +20,7 @@ const isHome = path === '/' || path === '';
 <header class="site-header">
   <div class="site-header__awning" aria-hidden="true"></div>
   <div class="site-header__bar">
-    <a class="site-header__brand" href="/" aria-label="Meaty Blog — home">
+    <a class="site-header__brand" href="/" aria-label={`${site.title} — home`}>
       <svg class="site-header__stamp" viewBox="0 0 140 140" aria-hidden="true" focusable="false">
         <defs>
           <path id="hdr-arc-top" d="M22,70 A48,48 0 0 1 118,70" fill="none"></path>
@@ -42,8 +44,8 @@ const isHome = path === '/' || path === '';
         </g>
       </svg>
       <span class="site-header__name">
-        Meaty Blog
-        <small class="site-header__est">EST. 2022 &middot; DATA CO.</small>
+        {site.title}
+        <small class="site-header__est">EST. {site.est} &middot; DATA CO.</small>
       </span>
     </a>
 

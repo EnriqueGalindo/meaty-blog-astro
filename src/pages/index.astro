@@ -11,6 +11,7 @@ import TodaysMenu from '../components/TodaysMenu.astro';
 import PostCard from '../components/PostCard.astro';
 import { getPublishedPosts } from '../lib/posts';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { site } from '../config/site';
 
 const posts = await getPublishedPosts();
 ---
@@ -19,7 +20,8 @@ const posts = await getPublishedPosts();
   {/* INTRO — paper. Carries the page's single <h1>. The brand wordmark/stamp
       lives in the site header (MEAT-44). */}
   <section class="intro container">
-    <h1 class="intro__title">Getting into the meat of it.</h1>
+    <h1 class="intro__title">{site.hero.title}</h1>
+    {site.hero.tagline && <p class="intro__tagline">{site.hero.tagline}</p>}
   </section>
 
   {/* TODAY'S MENU — the chalkboard menu board (MEAT-45 / D9). */}
@@ -77,6 +79,14 @@ const posts = await getPublishedPosts();
     font-size: clamp(2rem, 6vw, var(--fs-h1));
     line-height: var(--lh-tight);
     color: var(--color-text);
+  }
+  .intro__tagline {
+    margin: var(--space-4) auto 0;
+    max-width: var(--measure);
+    font-family: var(--font-serif);
+    font-size: var(--fs-lead);
+    line-height: var(--lh-normal);
+    color: var(--color-text-muted);
   }
 
   .board-wrap {

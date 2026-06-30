@@ -1,7 +1,8 @@
 // Site-wide constants.
 //
-// Placeholder values for the MVP routing scaffold (MEAT-18). The real
-// site-level SEO singleton (title, description, social image, etc.) is owned by
-// MEAT-15 and will replace these.
-export const SITE_TITLE = 'Meaty Blog';
-export const SITE_DESCRIPTION = 'A data-engineering blog — getting into the meat of it.';
+// The real site identity now lives in the typed site config (MEAT-43); these are
+// thin re-exports kept so existing `../consts` imports keep working.
+import { site } from './config/site';
+
+export const SITE_TITLE = site.title;
+export const SITE_DESCRIPTION = site.description;
