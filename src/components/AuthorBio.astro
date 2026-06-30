@@ -1,0 +1,99 @@
+---
+// Author / bio block (MEAT-47 / D6.1). Reusable and driven entirely by
+// site.author — used on the About page now, ready to drop into the post footer
+// later. Socials omitted for MVP (G2).
+//
+// The headshot finally renders here (staged in the author config by MEAT-43):
+// Astro's <Image> emits the optimized variant; the original is pruned post-build.
+import { Image } from 'astro:assets';
+import { site } from '../config/site';
+
+interface Props {
+  /** Heading level for the author name (default 2 — page <h1> sits above it). */
+  headingLevel?: 2 | 3;
+  /** Optional id so a parent region can be labelled by the name heading. */
+  headingId?: string;
+}
+
+const { headingLevel = 2, headingId } = Astro.props;
+const { name, role, bio, photo } = site.author;
+
+const PHOTO_W = 220;
+const photoHeight = Math.round((PHOTO_W * photo.height) / photo.width);
+const NameTag = `h${headingLevel}` as const;
+---
+
+<div class="bio">
+  <Image
+    class="bio__photo"
+    src={photo}
+    alt={name}
+    width={PHOTO_W}
+    height={photoHeight}
+    loading="eager"
+  />
+  <div class="bio__body">
+    <NameTag id={headingId} class="bio__name">{name}</NameTag>
+    <p class="bio__role">{role}</p>
+    {bio.map((para) => <p class="bio__para">{para}</p>)}
+  </div>
+</div>
+
+<style>
+  .bio {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-6);
+  }
+  /* Framed butcher-counter headshot (sharp-ish corners + offset block shadow). */
+  .bio__photo {
+    flex: 0 0 auto;
+    width: 220px;
+    height: auto;
+    border: var(--border-rule) solid var(--color-text);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-block);
+  }
+  .bio__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .bio__name {
+    margin: 0;
+    font-family: var(--font-sign);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-h2);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-sign);
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+  .bio__role {
+    margin: var(--space-1) 0 var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .bio__para {
+    margin: 0 0 var(--space-4);
+    font-family: var(--font-serif);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    color: var(--color-text);
+  }
+  .bio__para:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 36rem) {
+    .bio {
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .bio__photo {
+      width: 160px;
+    }
+  }
+</style>

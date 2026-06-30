@@ -1,0 +1,33 @@
+---
+// About page — /about (MEAT-47 / D6.1). Standalone home for the author/bio
+// section; activates the header "About" nav item. Content comes from the site
+// config (MEAT-43); rendering is the reusable AuthorBio block.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorBio from '../components/AuthorBio.astro';
+import { site } from '../config/site';
+
+const description = `About ${site.author.name} — ${site.author.role}.`;
+---
+
+<BaseLayout title="About — Meaty Blog" description={description}>
+  <section class="about container" aria-labelledby="about-heading">
+    <h1 id="about-heading" class="about__title">About</h1>
+    <AuthorBio headingLevel={2} />
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    max-width: var(--measure);
+    padding-block: var(--space-7) var(--space-8);
+  }
+  .about__title {
+    margin: 0 0 var(--space-6);
+    font-family: var(--font-serif);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-h1);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+  }
+</style>
