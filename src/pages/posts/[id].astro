@@ -68,15 +68,17 @@ const fmt = new Intl.DateTimeFormat('en-US', {
   ogType="article"
 >
   <article class="post container">
-    <header class="post__head measure">
-      {/* The page's single H1 comes from frontmatter; body h1s are demoted at source. */}
-      <h1 class="post__title">{title}</h1>
-      <p class="post__dek">{description}</p>
-      <p class="post__meta">
-        <time datetime={date.toISOString().slice(0, 10)}>{fmt.format(date)}</time>
-        <span aria-hidden="true">&middot;</span>
-        <span>{mins} min read</span>
-      </p>
+    <header class="post__head measure" data-surface="dark">
+      <div class="post__head-inner">
+        {/* The page's single H1 comes from frontmatter; body h1s are demoted at source. */}
+        <h1 class="post__title">{title}</h1>
+        <p class="post__dek">{description}</p>
+        <p class="post__meta">
+          <time datetime={date.toISOString().slice(0, 10)}>{fmt.format(date)}</time>
+          <span aria-hidden="true">&middot;</span>
+          <span>{mins} min read</span>
+        </p>
+      </div>
     </header>
 
     <div class="prose measure">
@@ -96,11 +98,22 @@ const fmt = new Intl.DateTimeFormat('en-US', {
   .prose {
     margin-inline: auto;
   }
+  /* --- Article header: wood-framed chalkboard (matches the home menu board) - */
   .post__head {
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-7);
+    padding: var(--space-2);
+    background: var(--color-board-frame);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lift);
   }
-
-  /* --- Article header ----------------------------------------------------- */
+  .post__head-inner {
+    padding: var(--space-7) var(--space-6);
+    background: var(--color-board-bg);
+    color: var(--color-board-text);
+    border: var(--border-hairline) solid
+      color-mix(in srgb, var(--color-board-text) 14%, transparent);
+    border-radius: var(--radius-sm);
+  }
   .post__title {
     margin: 0;
     font-family: var(--font-serif);
@@ -108,26 +121,26 @@ const fmt = new Intl.DateTimeFormat('en-US', {
     font-size: var(--fs-h1);
     line-height: var(--lh-tight);
     letter-spacing: var(--tracking-tight);
-    color: var(--color-text);
+    color: var(--color-board-text); /* 11.95:1 on slate */
   }
   .post__dek {
     margin: var(--space-4) 0 0;
     font-family: var(--font-serif);
     font-size: var(--fs-lead);
     line-height: var(--lh-normal);
-    color: var(--color-text-muted);
+    color: var(--color-board-text-muted); /* 7.86:1 on slate */
   }
-  /* Meta line mirrors the PostCard treatment (mono, uppercase, tracked). */
+  /* Meta line — mono/uppercase like PostCard; gold accent like the board date. */
   .post__meta {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    margin: var(--space-4) 0 0;
+    margin: var(--space-5) 0 0;
     font-family: var(--font-mono);
     font-size: var(--fs-meta);
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--color-board-accent); /* gold, 7.52:1 on slate */
   }
 
   /* --- Prose (Markdown body) ---------------------------------------------- */
@@ -259,5 +272,11 @@ const fmt = new Intl.DateTimeFormat('en-US', {
     font-family: var(--font-sign);
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
+  }
+
+  @media (max-width: 30rem) {
+    .post__head-inner {
+      padding: var(--space-6) var(--space-4);
+    }
   }
 </style>
