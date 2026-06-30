@@ -1,0 +1,123 @@
+---
+// Site header — shared chrome / banner (MEAT-44 / D8).
+//
+// Renders on every page (BaseLayout). The inspection-stamp lockup is a home
+// link (an <a>, never a heading — post pages keep their single <h1>). The stamp
+// SVG is inlined so its live Oswald <textPath> renders with the loaded webfont;
+// it's aria-hidden so the link's accessible name resolves once (the aria-label).
+//
+// Nav is intentionally minimal — only destinations that exist today (home / the
+// post list). About/Subscribe + a separate posts index come with later cards.
+const path = Astro.url.pathname;
+const isHome = path === '/' || path === '';
+---
+
+<header class="site-header">
+  <div class="site-header__awning" aria-hidden="true"></div>
+  <div class="site-header__bar">
+    <a class="site-header__brand" href="/" aria-label="Meaty Blog — home">
+      <svg
+        class="site-header__stamp"
+        viewBox="0 0 140 140"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <defs>
+          <path id="hdr-arc-top" d="M22,70 A48,48 0 0 1 118,70" fill="none"></path>
+          <path id="hdr-arc-bot" d="M26,70 A44,44 0 0 0 114,70" fill="none"></path>
+        </defs>
+        <circle cx="70" cy="70" r="60" fill="none" stroke="#9e2b25" stroke-width="3"></circle>
+        <circle cx="70" cy="70" r="46" fill="none" stroke="#9e2b25" stroke-width="1.4" stroke-dasharray="3 3"></circle>
+        <text class="site-header__stamp-arc" font-weight="700" font-size="13" letter-spacing="2.5" fill="#9e2b25">
+          <textPath href="#hdr-arc-top" startOffset="50%" text-anchor="middle">MEATY BLOG</textPath>
+        </text>
+        <text class="site-header__stamp-arc" font-weight="600" font-size="9" letter-spacing="2.5" fill="#9e2b25">
+          <textPath href="#hdr-arc-bot" startOffset="50%" text-anchor="middle">PRIME CUTS</textPath>
+        </text>
+        <g transform="translate(70,72) scale(0.62) translate(-60,-60)">
+          <rect x="24" y="36" width="72" height="48" fill="#9e2b25"></rect>
+          <ellipse cx="60" cy="36" rx="36" ry="13" fill="#9e2b25"></ellipse>
+          <ellipse cx="60" cy="84" rx="36" ry="13" fill="#9e2b25"></ellipse>
+          <ellipse cx="60" cy="36" rx="36" ry="13" fill="none" stroke="#ece1d0" stroke-width="3"></ellipse>
+          <path d="M26,61 q17,-7 34,0 t34,0" fill="none" stroke="#ece1d0" stroke-width="3.4"></path>
+          <path d="M26,69 q17,-7 34,0 t34,0" fill="none" stroke="#ece1d0" stroke-width="3.4"></path>
+        </g>
+      </svg>
+    </a>
+
+    <nav class="site-header__nav" aria-label="Primary">
+      <a href="/" aria-current={isHome ? 'page' : undefined}>Posts</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* Deli-awning stripe along the very top edge of the page. */
+  .site-header__awning {
+    height: 14px;
+    background: var(--awning-stripe);
+    border-bottom: var(--border-heavy) solid var(--color-accent);
+  }
+
+  .site-header {
+    background: var(--color-surface);
+    border-bottom: var(--border-heavy) solid var(--color-text);
+  }
+  .site-header__bar {
+    max-width: var(--container);
+    margin-inline: auto;
+    padding: var(--space-3) var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .site-header__brand {
+    display: inline-flex;
+    line-height: 0;
+  }
+  .site-header__stamp {
+    display: block;
+    width: auto;
+    height: 56px;
+  }
+  /* SVG presentation attrs can't take a CSS var(); the literal in the master
+     asset may not match Astro's generated @font-face name, so set the loaded
+     signage font here (mirrors the D3 hero stamp). */
+  .site-header__stamp-arc {
+    font-family: var(--font-sign);
+  }
+
+  .site-header__nav {
+    display: flex;
+    gap: var(--space-5);
+  }
+  .site-header__nav a {
+    font-family: var(--font-sign);
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-small);
+    letter-spacing: var(--tracking-sign);
+    text-transform: uppercase;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .site-header__nav a:hover,
+  .site-header__nav a:focus-visible {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+  .site-header__nav a[aria-current='page'] {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 30rem) {
+    .site-header__bar {
+      padding: var(--space-3) var(--space-4);
+    }
+    .site-header__stamp {
+      height: 48px;
+    }
+  }
+</style>
