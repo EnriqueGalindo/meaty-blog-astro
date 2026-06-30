@@ -38,15 +38,15 @@ export const site: SiteConfig = {
   title: 'Meaty Blog',
   description:
     'Data engineering, self-hosting, and taking back control of your data — getting into the meat of it.',
-  keywords: ['data engineering', 'self-hosting', 'home lab', 'data ownership', 'privacy'],
+  keywords: ['data engineering', 'self-hosting', 'home lab', 'data ownership', 'privacy', 'databricks'],
   url: 'https://meaty.blog',
   est: 2022,
   author: {
     name: 'Enrique Galindo',
-    role: 'Data engineer',
+    role: 'Data architect · Indiana Pacers',
     bio: [
-      "I'm Enrique — a data engineer who likes getting into the meat of how systems actually work.",
-      'I write about data engineering, self-hosting, and reclaiming ownership of your data and infrastructure.',
+      "I'm Enrique — a data architect with the Indiana Pacers. I've spent the last four years working with sports-business data, currently in a mostly Databricks-focused environment.",
+      'I write here about data engineering, self-hosting, reclaiming ownership of your data, and anything else that strikes my fancy.',
     ],
     photo: authorPhoto,
   },
