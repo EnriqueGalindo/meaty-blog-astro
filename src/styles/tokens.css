@@ -26,6 +26,7 @@
   --c-tag-gold:     #e8b04b;  /* ticket / highlight accent */
   --c-line:         #d8c9b4;  /* hairlines, dashed rules, block shadow */
   --c-board:        #232a24;  /* chalkboard slate (homepage hero) */
+  --c-board-frame:  #6b4a2f;  /* wood frame around the menu board (decorative) */
   --c-chalk:        #efe7d6;  /* chalk text on board */
   --c-chalk-dim:    #c4bdac;  /* muted chalk on board */
   --c-counter:      #1f1712;  /* dark counter (footer / behind sheets) */
@@ -48,11 +49,12 @@
   --color-inverse-text:  var(--c-paper);      /* 13.40:1 */
   --color-counter:       var(--c-counter);
 
-  /* Chalkboard surface (homepage "Today's Menu" hero only) */
+  /* Chalkboard surface (homepage "Today's Menu" hero / menu board) */
   --color-board-bg:          var(--c-board);
   --color-board-text:        var(--c-chalk);      /* 11.95:1 */
   --color-board-text-muted:  var(--c-chalk-dim);  /*  7.86:1 */
   --color-board-accent:      var(--c-tag-gold);   /*  7.52:1 */
+  --color-board-frame:       var(--c-board-frame);/* decorative wood frame (MEAT-45) */
 
   /* Code block syntax (dark panel) — all AA on --code-bg */
   --code-bg:        #1c1611;
