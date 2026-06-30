@@ -1,0 +1,167 @@
+---
+// PostCard — a single post in the home listing (MEAT-24 / D4).
+//
+// Horizontal "menu-listing" card: hero thumbnail + text. Source order is
+// heading-first so heading-navigation lands cleanly (Heydon Pickering); the
+// thumbnail is rendered to the left on desktop / on top on mobile via flex
+// `order`. Accessible "stretched link" pattern: the <article> is positioned and
+// the title link's ::after overlays the whole card, so each card exposes exactly
+// ONE link in the a11y tree (the title) while the entire card stays clickable.
+import { Image } from 'astro:assets';
+import type { PostEntry } from '../lib/posts';
+
+interface Props {
+  post: PostEntry;
+}
+
+const { post } = Astro.props;
+const { title, date, description, heroImage } = post.data;
+
+// UTC formatting matches the machine-readable datetime attribute and never rolls
+// the day back across timezones (MEAT-18) — same as the post page / home.
+const fmt = new Intl.DateTimeFormat('en-US', {
+  dateStyle: 'long',
+  timeZone: 'UTC',
+});
+---
+
+<article class="card">
+  <div class="card__body">
+    <h3 class="card__title">
+      <a href={`/posts/${post.id}/`}>{title}</a>
+    </h3>
+    <time class="card__date" datetime={date.toISOString().slice(0, 10)}>
+      {fmt.format(date)}
+    </time>
+    <p class="card__desc">{description}</p>
+  </div>
+
+  {/* Decorative in the list: the title is the accessible label, so an empty alt
+      keeps the thumbnail out of the a11y tree (the meaningful hero alt lives on
+      the post page, D5). Below the fold → lazy; the LCP is the chalkboard hero. */}
+  <div class="card__media">
+    <Image
+      src={heroImage}
+      alt=""
+      widths={[256, 384, 512, 720]}
+      sizes="(max-width: 40rem) 100vw, 360px"
+      fit="cover"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: var(--border-rule) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-block);
+    overflow: hidden;
+  }
+
+  /* Keyboard focus ring on the whole card (the stretched link is the only
+     focusable child). `:has(:focus-visible)` keeps it keyboard-only; the link's
+     own outline is suppressed below so the ring isn't doubled. Uses the
+     surface-aware --color-focus (D3), AA on the cream surface. */
+  .card:has(a:focus-visible) {
+    outline: var(--border-rule) solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  .card__body {
+    padding: var(--space-5);
+  }
+
+  .card__title {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-serif);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-h3);
+    line-height: var(--lh-snug);
+    overflow-wrap: break-word;
+  }
+  /* Title is already distinct by size/weight/position, so no default underline;
+     the affordance is the card + hover. Underline appears on hover/focus. */
+  .card__title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .card__title a:hover,
+  .card__title a:focus-visible {
+    text-decoration: underline;
+  }
+  /* Card-level ring handles the visible focus; drop the inner link's outline. */
+  .card__title a:focus-visible {
+    outline: none;
+  }
+  /* Stretched link: overlay the whole card so it's all clickable while the title
+     stays the single link in the a11y tree. */
+  .card__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .card__date {
+    display: block;
+    margin-bottom: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-muted);
+  }
+
+  .card__desc {
+    margin: 0;
+    font-family: var(--font-serif);
+    color: var(--color-text-muted);
+    /* Clamp to keep card heights even; full text lives on the post page. */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  /* Hero box: consistent thumbnail regardless of the source ratio. `order: -1`
+     renders it before the body — left on desktop (row), on top on mobile
+     (column). */
+  .card__media {
+    order: -1;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+  .card__media :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Hover lift — motion only when the user hasn't asked to reduce it. */
+  @media (prefers-reduced-motion: no-preference) {
+    .card {
+      transition:
+        transform var(--duration) var(--ease),
+        box-shadow var(--duration) var(--ease);
+    }
+    .card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--color-border);
+    }
+  }
+
+  /* Desktop: thumbnail-left row. */
+  @media (min-width: 40rem) {
+    .card {
+      flex-direction: row;
+    }
+    .card__media {
+      flex: 0 0 34%;
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

@@ -5,17 +5,11 @@
 // are D4; author/footer is D6; a global header is D8/MEAT-44. Copy here is
 // brand-level; personalized copy is MEAT-43.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
 import { getPublishedPosts } from '../lib/posts';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const posts = await getPublishedPosts();
-
-// Human-readable date label, formatted in UTC so it matches the machine-readable
-// `datetime` attribute and never rolls back a day across timezones (MEAT-18).
-const fmt = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'long',
-  timeZone: 'UTC',
-});
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -58,9 +52,9 @@ const fmt = new Intl.DateTimeFormat('en-US', {
     <div class="hero__awning" aria-hidden="true"></div>
   </section>
 
-  {/* POST LIST — the "clear entry point into the post list" (AC). Minimal by
-      design: type + hairline rules only; designed cards are D4. Labelled region
-      so it shows in the landmark map. */}
+  {/* POST LIST — the post listing (AC: accessible list of post cards). Labelled
+      region so it shows in the landmark map. Each card is a <PostCard> (D4); the
+      <li>/<ul> wrapper keeps it an accessible list. */}
   <section class="menu container" aria-labelledby="menu-heading">
     <h2 id="menu-heading" class="menu__heading">Fresh Cuts</h2>
 
@@ -68,18 +62,10 @@ const fmt = new Intl.DateTimeFormat('en-US', {
       posts.length === 0 ? (
         <p class="menu__empty">No posts yet.</p>
       ) : (
-        <ul class="menu__list" role="list">
+        <ul class="card-list" role="list">
           {posts.map((post) => (
-            <li class="menu__item">
-              <article>
-                <h3 class="menu__title">
-                  <a href={`/posts/${post.id}/`}>{post.data.title}</a>
-                </h3>
-                <time class="menu__date" datetime={post.data.date.toISOString().slice(0, 10)}>
-                  {fmt.format(post.data.date)}
-                </time>
-                <p class="menu__desc measure">{post.data.description}</p>
-              </article>
+            <li>
+              <PostCard post={post} />
             </li>
           ))}
         </ul>
@@ -161,48 +147,20 @@ const fmt = new Intl.DateTimeFormat('en-US', {
     text-transform: uppercase;
     color: var(--color-accent);
   }
-  .menu__list {
+  .card-list {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: grid;
+    gap: var(--space-6);
   }
-  .menu__item {
-    padding-block: var(--space-5);
-    border-top: var(--border-hairline) solid var(--color-border);
-  }
-  .menu__item:last-child {
-    border-bottom: var(--border-hairline) solid var(--color-border);
-  }
-  .menu__title {
-    margin: 0 0 var(--space-2);
-    font-family: var(--font-serif);
-    font-weight: var(--fw-bold);
-    font-size: var(--fs-h3);
-    line-height: var(--lh-snug);
-    overflow-wrap: break-word;
+  .menu__empty {
+    color: var(--color-text-muted);
   }
 
   @media (max-width: 30rem) {
     .hero__inner {
       padding: var(--space-8) var(--space-4) var(--space-7);
     }
-  }
-  .menu__title a {
-    text-decoration: underline;
-  }
-  .menu__date {
-    display: block;
-    margin-bottom: var(--space-2);
-    font-family: var(--font-mono);
-    font-size: var(--fs-meta);
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-text-muted);
-  }
-  .menu__desc {
-    margin: 0;
-    color: var(--color-text-muted);
-  }
-  .menu__empty {
-    color: var(--color-text-muted);
   }
 </style>
