@@ -14,6 +14,14 @@ export default defineConfig({
     layout: 'constrained',
     responsiveStyles: true,
   },
+  markdown: {
+    // Code-block highlighting (MEAT-25/D5). Shiki still runs under Astro 7's
+    // native Satteri pipeline; the `css-variables` theme emits `--astro-code-*`
+    // custom properties instead of hard-coded colors, which the post layout
+    // bridges onto the D1 `--code-*` palette (tokens.css stays the single source
+    // of truth). See the `pre.astro-code` rule in src/pages/posts/[id].astro.
+    shikiConfig: { theme: 'css-variables' },
+  },
   // Self-hosted webfonts via Astro's native Fonts API (MEAT-23/D3). Maps the 4
   // D1 type roles (tokens.css) to Fontsource families. Fonts are downloaded at
   // build, served from /_astro/fonts, and get metric-optimized fallbacks +
