@@ -6,6 +6,7 @@
 // (tokens + base layer), and the self-hosted brand webfonts.
 import { Font } from 'astro:assets';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import { SITE_TITLE } from '../consts';
 import '../styles/global.css';
 
@@ -92,5 +93,6 @@ const resolvedOgImageAlt = ogImageAlt ?? 'Meaty Blog — getting into the meat o
     <main id="main-content" tabindex="-1">
       <slot />
     </main>
+    <Footer />
   </body>
 </html>
