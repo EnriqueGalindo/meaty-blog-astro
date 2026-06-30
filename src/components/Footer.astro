@@ -1,0 +1,42 @@
+---
+// Site footer — shared chrome / contentinfo (MEAT-26 / D6).
+//
+// Renders on every page (BaseLayout), after <main>. Matches the D1 mockup: a
+// single centered brand line on cream with a heavy ink top rule. Socials are
+// intentionally omitted for MVP (G2); the author/bio section is deferred to ride
+// with its content (MEAT-43). Copyright year is derived at build so it stays
+// current.
+import { SITE_TITLE } from '../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <p class="site-footer__line">
+    <b class="site-footer__brand"><span aria-hidden="true">🥩</span> {SITE_TITLE}</b>
+    &mdash; getting into the meat of it &middot; all cuts inspected &middot; &copy; {year}
+  </p>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-8);
+    padding: var(--space-6) var(--space-5);
+    border-top: var(--border-heavy) solid var(--color-text);
+    text-align: center;
+  }
+  .site-footer__line {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tracking-wide);
+    line-height: var(--lh-normal);
+    color: var(--color-text-muted);
+  }
+  .site-footer__brand {
+    font-family: var(--font-sign);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--tracking-sign);
+    color: var(--color-text);
+  }
+</style>
