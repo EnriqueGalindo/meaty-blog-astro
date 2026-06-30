@@ -16,17 +16,9 @@ const posts = await getPublishedPosts();
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  {/* INTRO — paper. Carries the page's single <h1>. The brand mark is decorative
-      (the "MEATY BLOG" wordmark lives in the header, MEAT-44). */}
+  {/* INTRO — paper. Carries the page's single <h1>. The brand wordmark/stamp
+      lives in the site header (MEAT-44). */}
   <section class="intro container">
-    <img
-      class="intro__mark"
-      src="/brand/logo-icon.svg"
-      alt=""
-      aria-hidden="true"
-      width="72"
-      height="72"
-    />
     <h1 class="intro__title">Getting into the meat of it.</h1>
   </section>
 
@@ -65,12 +57,6 @@ const posts = await getPublishedPosts();
   .intro {
     padding-block: var(--space-8) var(--space-6);
     text-align: center;
-  }
-  .intro__mark {
-    display: block;
-    width: 72px;
-    height: auto;
-    margin: 0 auto var(--space-4);
   }
   .intro__title {
     margin: 0;

@@ -5,6 +5,7 @@
 // description, canonical, Open Graph, twitter:card), the global stylesheet
 // (tokens + base layer), and the self-hosted brand webfonts.
 import { Font } from 'astro:assets';
+import Header from '../components/Header.astro';
 import { SITE_TITLE } from '../consts';
 import '../styles/global.css';
 
@@ -87,6 +88,7 @@ const resolvedOgImageAlt = ogImageAlt ?? 'Meaty Blog — getting into the meat o
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
+    <Header />
     <main id="main-content" tabindex="-1">
       <slot />
     </main>
