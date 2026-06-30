@@ -1,11 +1,13 @@
 ---
 // Site header — shared chrome / banner (MEAT-44 / D8).
 //
-// Matches the D1 homepage mockup: awning strip → bar with the "USDA PRIME /
-// Inspected" grade-stamp + "MEATY BLOG" wordmark (+ "EST. 2026 · DATA CO."
-// sub-line) as the home link, and a POSTS / ABOUT / SUBSCRIBE nav. The whole
-// lockup is the home <a> (never a heading — post pages keep their single <h1>);
-// its accessible name resolves once via aria-label, with the badge aria-hidden.
+// Mockup lockup layout, but with OUR brand mark: awning strip → bar with the
+// official round inspection stamp (logo-stamp.svg, tilted like the mockup badge)
+// + "MEATY BLOG" wordmark (+ "EST. 2026 · DATA CO." sub-line) as the home link,
+// and a POSTS / ABOUT / SUBSCRIBE nav. The whole lockup is the home <a> (never a
+// heading — post pages keep their single <h1>); its accessible name resolves
+// once via aria-label, with the stamp aria-hidden. The stamp is inlined so its
+// live Oswald <textPath> renders with the loaded webfont.
 //
 // About/Subscribe have no pages yet, so they render as non-interactive
 // placeholders (no dead links) until those cards land.
@@ -17,11 +19,28 @@ const isHome = path === '/' || path === '';
   <div class="site-header__awning" aria-hidden="true"></div>
   <div class="site-header__bar">
     <a class="site-header__brand" href="/" aria-label="Meaty Blog — home">
-      <span class="site-header__badge" aria-hidden="true">
-        <span class="site-header__badge-top">USDA</span>
-        <span class="site-header__badge-big">PRIME</span>
-        <span class="site-header__badge-bot">Inspected</span>
-      </span>
+      <svg class="site-header__stamp" viewBox="0 0 140 140" aria-hidden="true" focusable="false">
+        <defs>
+          <path id="hdr-arc-top" d="M22,70 A48,48 0 0 1 118,70" fill="none"></path>
+          <path id="hdr-arc-bot" d="M26,70 A44,44 0 0 0 114,70" fill="none"></path>
+        </defs>
+        <circle cx="70" cy="70" r="60" fill="none" stroke="#9e2b25" stroke-width="3"></circle>
+        <circle cx="70" cy="70" r="46" fill="none" stroke="#9e2b25" stroke-width="1.4" stroke-dasharray="3 3"></circle>
+        <text class="site-header__stamp-arc" font-weight="700" font-size="13" letter-spacing="2.5" fill="#9e2b25">
+          <textPath href="#hdr-arc-top" startOffset="50%" text-anchor="middle">MEATY BLOG</textPath>
+        </text>
+        <text class="site-header__stamp-arc" font-weight="600" font-size="9" letter-spacing="2.5" fill="#9e2b25">
+          <textPath href="#hdr-arc-bot" startOffset="50%" text-anchor="middle">PRIME CUTS</textPath>
+        </text>
+        <g transform="translate(70,72) scale(0.62) translate(-60,-60)">
+          <rect x="24" y="36" width="72" height="48" fill="#9e2b25"></rect>
+          <ellipse cx="60" cy="36" rx="36" ry="13" fill="#9e2b25"></ellipse>
+          <ellipse cx="60" cy="84" rx="36" ry="13" fill="#9e2b25"></ellipse>
+          <ellipse cx="60" cy="36" rx="36" ry="13" fill="none" stroke="#ece1d0" stroke-width="3"></ellipse>
+          <path d="M26,61 q17,-7 34,0 t34,0" fill="none" stroke="#ece1d0" stroke-width="3.4"></path>
+          <path d="M26,69 q17,-7 34,0 t34,0" fill="none" stroke="#ece1d0" stroke-width="3.4"></path>
+        </g>
+      </svg>
       <span class="site-header__name">
         Meaty Blog
         <small class="site-header__est">EST. 2026 &middot; DATA CO.</small>
@@ -68,44 +87,19 @@ const isHome = path === '/' || path === '';
     text-decoration: none;
   }
 
-  /* "USDA PRIME / Inspected" grade-stamp badge. */
-  .site-header__badge {
+  /* Official round inspection stamp, tilted like the mockup badge. */
+  .site-header__stamp {
     flex: 0 0 auto;
-    position: relative;
-    width: 64px;
+    display: block;
+    width: auto;
     height: 64px;
-    border-radius: var(--radius-round);
-    border: var(--border-rule) solid var(--color-accent);
-    color: var(--color-accent);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    font-family: var(--font-sign);
     transform: rotate(-7deg);
   }
-  .site-header__badge::before {
-    content: '';
-    position: absolute;
-    inset: 5px;
-    border-radius: var(--radius-round);
-    border: var(--border-hairline) dashed var(--color-accent);
-    opacity: 0.7;
-  }
-  .site-header__badge-top {
-    font-weight: var(--fw-bold);
-    font-size: 0.5rem;
-    letter-spacing: 0.15em;
-  }
-  .site-header__badge-big {
-    font-weight: var(--fw-bold);
-    font-size: 1.125rem;
-  }
-  .site-header__badge-bot {
-    font-weight: var(--fw-semibold);
-    font-size: 0.4375rem;
-    letter-spacing: 0.08em;
+  /* SVG presentation attrs can't take a CSS var(); the literal in the master
+     asset may not match Astro's generated @font-face name, so set the loaded
+     signage font here (mirrors the D3 hero stamp). */
+  .site-header__stamp-arc {
+    font-family: var(--font-sign);
   }
 
   .site-header__name {
@@ -164,12 +158,8 @@ const isHome = path === '/' || path === '';
       padding: var(--space-3) var(--space-4);
       gap: var(--space-2) var(--space-4);
     }
-    .site-header__badge {
-      width: 52px;
+    .site-header__stamp {
       height: 52px;
-    }
-    .site-header__badge-big {
-      font-size: 0.9375rem;
     }
     .site-header__name {
       font-size: var(--fs-h3);
