@@ -1,10 +1,13 @@
 ---
-// Home — "Today's Menu" chalkboard hero + the post list (MEAT-23 / D3).
+// Home — intro + "Today's Menu" chalkboard menu board + the full post list.
 //
-// Scope: hero + a clear, accessible entry into the post list. Rich post cards
-// are D4; author/footer is D6; a global header is D8/MEAT-44. Copy here is
-// brand-level; personalized copy is MEAT-43.
+// Mockup-faithful per D1 (MEAT-45 / D9): the chalkboard is a real menu of posts
+// (featured "Today's Cut" + "This Week's Catch List"), not a wordmark hero. The
+// site wordmark moves to the shared header (MEAT-44); the icon below is a
+// decorative bridge until then. Designed cards = D4; "THE FULL CASE" restyle,
+// author/footer (D6), and personalized/data-eng copy (MEAT-43) are out of scope.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import TodaysMenu from '../components/TodaysMenu.astro';
 import PostCard from '../components/PostCard.astro';
 import { getPublishedPosts } from '../lib/posts';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
@@ -13,48 +16,31 @@ const posts = await getPublishedPosts();
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  {/* HERO — the one intentional dark surface (chalkboard). Unnamed <section>, so
-      it is not exposed as a landmark; it carries the page's single <h1>. */}
-  <section class="hero" data-surface="dark">
-    <div class="hero__inner">
-      {/* Inspection-stamp lockup. Decorative — the <h1> already names the site,
-          so it's aria-hidden to avoid duplicate screen-reader output. Inlined so
-          the browser renders its live Oswald curved text with the loaded font. */}
-      <div class="hero__stamp" aria-hidden="true">
-        <svg viewBox="0 0 140 140" role="presentation">
-          <defs>
-            <path id="arc-top-r" d="M22,70 A48,48 0 0 1 118,70" fill="none"></path>
-            <path id="arc-bot-r" d="M26,70 A44,44 0 0 0 114,70" fill="none"></path>
-          </defs>
-          <circle cx="70" cy="70" r="60" fill="none" stroke="#f4ece0" stroke-width="3"></circle>
-          <circle cx="70" cy="70" r="46" fill="none" stroke="#f4ece0" stroke-width="1.4" stroke-dasharray="3 3"></circle>
-          <text class="hero__stamp-arc" font-weight="700" font-size="13" letter-spacing="2.5" fill="#f4ece0">
-            <textPath href="#arc-top-r" startOffset="50%" text-anchor="middle">MEATY BLOG</textPath>
-          </text>
-          <text class="hero__stamp-arc" font-weight="600" font-size="9" letter-spacing="2.5" fill="#f4ece0">
-            <textPath href="#arc-bot-r" startOffset="50%" text-anchor="middle">PRIME CUTS</textPath>
-          </text>
-          <g transform="translate(70,72) scale(0.62) translate(-60,-60)">
-            <rect x="24" y="36" width="72" height="48" fill="#f4ece0"></rect>
-            <ellipse cx="60" cy="36" rx="36" ry="13" fill="#f4ece0"></ellipse>
-            <ellipse cx="60" cy="84" rx="36" ry="13" fill="#f4ece0"></ellipse>
-            <ellipse cx="60" cy="36" rx="36" ry="13" fill="none" stroke="#9e2b25" stroke-width="3"></ellipse>
-            <path d="M26,61 q17,-7 34,0 t34,0" fill="none" stroke="#9e2b25" stroke-width="3.4"></path>
-            <path d="M26,69 q17,-7 34,0 t34,0" fill="none" stroke="#9e2b25" stroke-width="3.4"></path>
-          </g>
-        </svg>
-      </div>
-
-      <p class="hero__eyebrow" aria-hidden="true">Today&rsquo;s Menu</p>
-      <h1 class="hero__title">{SITE_TITLE}</h1>
-      <p class="hero__tagline">Getting into the meat of it.</p>
-    </div>
-    <div class="hero__awning" aria-hidden="true"></div>
+  {/* INTRO — paper. Carries the page's single <h1>. The brand mark is decorative
+      (the "MEATY BLOG" wordmark lives in the header, MEAT-44). */}
+  <section class="intro container">
+    <img
+      class="intro__mark"
+      src="/brand/logo-icon.svg"
+      alt=""
+      aria-hidden="true"
+      width="72"
+      height="72"
+    />
+    <h1 class="intro__title">Getting into the meat of it.</h1>
   </section>
 
-  {/* POST LIST — the post listing (AC: accessible list of post cards). Labelled
-      region so it shows in the landmark map. Each card is a <PostCard> (D4); the
-      <li>/<ul> wrapper keeps it an accessible list. */}
+  {/* TODAY'S MENU — the chalkboard menu board (MEAT-45 / D9). */}
+  {
+    posts.length > 0 && (
+      <div class="container board-wrap">
+        <TodaysMenu posts={posts} />
+      </div>
+    )
+  }
+
+  {/* FULL POST LIST — designed cards (D4). The "THE FULL CASE" strip + CTA is a
+      separate revise-D4 card. Labelled region so it shows in the landmark map. */}
   <section class="menu container" aria-labelledby="menu-heading">
     <h2 id="menu-heading" class="menu__heading">Fresh Cuts</h2>
 
@@ -75,63 +61,28 @@ const posts = await getPublishedPosts();
 </BaseLayout>
 
 <style>
-  /* --- Hero: chalkboard --------------------------------------------------- */
-  .hero {
-    position: relative;
-    background-color: var(--color-board-bg);
-    color: var(--color-board-text);
-    box-shadow: var(--shadow-lift);
-  }
-  .hero__inner {
-    max-width: var(--container);
-    margin-inline: auto;
-    padding: var(--space-9) var(--space-5) var(--space-8);
+  /* --- Intro -------------------------------------------------------------- */
+  .intro {
+    padding-block: var(--space-8) var(--space-6);
     text-align: center;
   }
-  .hero__stamp {
-    width: 116px;
-    margin: 0 auto var(--space-5);
-  }
-  .hero__stamp svg {
+  .intro__mark {
     display: block;
-    width: 100%;
+    width: 72px;
     height: auto;
+    margin: 0 auto var(--space-4);
   }
-  /* SVG text can't take a CSS var() in a presentation attribute, so the curved
-     Oswald is set here (resolves to the loaded webfont). */
-  .hero__stamp-arc {
-    font-family: var(--font-sign);
-  }
-  .hero__eyebrow {
-    margin: 0;
-    font-family: var(--font-chalk);
-    font-size: var(--fs-h2);
-    line-height: 1;
-    color: var(--color-board-accent);
-  }
-  .hero__title {
-    margin: var(--space-2) 0 var(--space-3);
-    font-family: var(--font-sign);
-    font-weight: var(--fw-bold);
-    /* Fluid so the display wordmark never overflows narrow viewports. */
-    font-size: clamp(2.75rem, 11vw, var(--fs-display));
-    line-height: var(--lh-tight);
-    letter-spacing: var(--tracking-sign);
-    text-transform: uppercase;
-    color: var(--color-board-text);
-  }
-  .hero__tagline {
+  .intro__title {
     margin: 0;
     font-family: var(--font-serif);
-    font-style: italic;
-    font-size: var(--fs-lead);
-    color: var(--color-board-text-muted);
+    font-weight: var(--fw-bold);
+    font-size: clamp(2rem, 6vw, var(--fs-h1));
+    line-height: var(--lh-tight);
+    color: var(--color-text);
   }
-  /* Deli-awning stripe pinned to the bottom edge of the board. */
-  .hero__awning {
-    height: 14px;
-    background: var(--awning-stripe);
-    border-bottom: var(--border-heavy) solid var(--color-accent);
+
+  .board-wrap {
+    padding-bottom: var(--space-4);
   }
 
   /* --- Post list ---------------------------------------------------------- */
@@ -156,11 +107,5 @@ const posts = await getPublishedPosts();
   }
   .menu__empty {
     color: var(--color-text-muted);
-  }
-
-  @media (max-width: 30rem) {
-    .hero__inner {
-      padding: var(--space-8) var(--space-4) var(--space-7);
-    }
   }
 </style>
