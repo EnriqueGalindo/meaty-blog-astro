@@ -31,22 +31,34 @@ const posts = await getPublishedPosts();
     )
   }
 
-  {/* FULL POST LIST — designed cards (D4). The "THE FULL CASE" strip + CTA is a
-      separate revise-D4 card. Labelled region so it shows in the landmark map. */}
+  {/* FULL POST LIST — "The Full Case" archive (D4.1 / MEAT-46): dark strip +
+      ticket rows + CTA. Labelled region so it shows in the landmark map. */}
   <section class="menu container" aria-labelledby="menu-heading">
-    <h2 id="menu-heading" class="menu__heading">Fresh Cuts</h2>
+    <div class="arch-head">
+      <h2 id="menu-heading" class="arch-head__title">
+        <span aria-hidden="true">🥩</span> The Full Case
+      </h2>
+      <span class="arch-head__note" aria-hidden="true">everything in the shop</span>
+    </div>
 
     {
       posts.length === 0 ? (
         <p class="menu__empty">No posts yet.</p>
       ) : (
-        <ul class="card-list" role="list">
-          {posts.map((post) => (
-            <li>
-              <PostCard post={post} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul class="card-list" role="list">
+            {posts.map((post) => (
+              <li>
+                <PostCard post={post} />
+              </li>
+            ))}
+          </ul>
+          {/* Placeholder until an archive / pagination exists (the home already
+              lists every post); non-interactive so it isn't a dead link. */}
+          <div class="more">
+            <span class="btn" aria-hidden="true">Browse the whole case &rarr;</span>
+          </div>
+        </>
       )
     }
   </section>
@@ -75,23 +87,63 @@ const posts = await getPublishedPosts();
   .menu {
     padding-block: var(--space-8);
   }
-  .menu__heading {
-    margin: 0 0 var(--space-6);
+  /* "The Full Case" archive strip. */
+  .arch-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-inverse-bg);
+    color: var(--color-inverse-text);
+    border-radius: var(--radius-md);
+  }
+  .arch-head__title {
+    margin: 0;
     font-family: var(--font-sign);
-    font-weight: var(--fw-semibold);
-    font-size: var(--fs-h2);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-lead);
     letter-spacing: var(--tracking-sign);
     text-transform: uppercase;
-    color: var(--color-accent);
+  }
+  .arch-head__note {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-highlight);
   }
   .card-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    gap: var(--space-6);
+  }
+  /* CTA button — D1 ink block-shadow (placeholder; see markup note). */
+  .more {
+    margin-top: var(--space-7);
+    text-align: center;
+  }
+  .btn {
+    display: inline-block;
+    font-family: var(--font-sign);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-small);
+    letter-spacing: var(--tracking-sign);
+    text-transform: uppercase;
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    padding: var(--space-3) var(--space-6);
+    border: var(--border-rule) solid var(--color-text);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-block-ink);
   }
   .menu__empty {
     color: var(--color-text-muted);
+  }
+
+  @media (max-width: 30rem) {
+    .arch-head__note {
+      display: none;
+    }
   }
 </style>

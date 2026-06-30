@@ -1,54 +1,43 @@
 ---
-// PostCard — a single post in the home listing (MEAT-24 / D4).
+// PostCard — one row in "The Full Case" archive list (MEAT-24, restyled by
+// MEAT-46 / D4.1 to the D1 mockup).
 //
-// Horizontal "menu-listing" card: hero thumbnail + text. Source order is
-// heading-first so heading-navigation lands cleanly (Heydon Pickering); the
-// thumbnail is rendered to the left on desktop / on top on mobile via flex
-// `order`. Accessible "stretched link" pattern: the <article> is positioned and
-// the title link's ::after overlays the whole card, so each card exposes exactly
-// ONE link in the a11y tree (the title) while the entire card stays clickable.
-import { Image } from 'astro:assets';
+// Flat dashed-divider row: a rotated read-time "ticket" (no hero image — the
+// ticket replaces the thumbnail per the mockup) + body (date, title link, dek).
+// Stretched-link pattern: the <article> is positioned and the title link's
+// ::after overlays the row, so each row exposes exactly ONE link (the title)
+// while the whole row is clickable. Read-time reuses the MEAT-45 util.
 import type { PostEntry } from '../lib/posts';
+import { readingTimeMinutes } from '../lib/reading-time';
 
 interface Props {
   post: PostEntry;
 }
 
 const { post } = Astro.props;
-const { title, date, description, heroImage } = post.data;
+const { title, date, description } = post.data;
+const mins = readingTimeMinutes(post.body);
 
-// UTC formatting matches the machine-readable datetime attribute and never rolls
-// the day back across timezones (MEAT-18) — same as the post page / home.
-const fmt = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'long',
-  timeZone: 'UTC',
-});
+// UTC so the label matches the machine-readable datetime and never rolls a day
+// across timezones (MEAT-18).
+const fmt = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 'UTC' });
 ---
 
 <article class="card">
+  <div class="card__ticket">
+    <span class="card__mins">{mins}<span class="card__mins-u">min</span></span>
+    <span class="card__est">est. read</span>
+    <span class="card__barcode" aria-hidden="true"></span>
+  </div>
+
   <div class="card__body">
+    <p class="card__meta">
+      <time datetime={date.toISOString().slice(0, 10)}>{fmt.format(date)}</time>
+    </p>
     <h3 class="card__title">
       <a href={`/posts/${post.id}/`}>{title}</a>
     </h3>
-    <time class="card__date" datetime={date.toISOString().slice(0, 10)}>
-      {fmt.format(date)}
-    </time>
     <p class="card__desc">{description}</p>
-  </div>
-
-  {/* Decorative in the list: the title is the accessible label, so an empty alt
-      keeps the thumbnail out of the a11y tree (the meaningful hero alt lives on
-      the post page, D5). Below the fold → lazy; the LCP is the chalkboard hero. */}
-  <div class="card__media">
-    <Image
-      src={heroImage}
-      alt=""
-      widths={[256, 384, 512, 720]}
-      sizes="(max-width: 40rem) 100vw, 360px"
-      fit="cover"
-      loading="lazy"
-      decoding="async"
-    />
   </div>
 </article>
 
@@ -56,27 +45,75 @@ const fmt = new Intl.DateTimeFormat('en-US', {
   .card {
     position: relative;
     display: flex;
-    flex-direction: column;
-    background: var(--color-surface);
-    border: var(--border-rule) solid var(--color-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-block);
-    overflow: hidden;
+    gap: var(--space-5);
+    align-items: flex-start;
+    padding-block: var(--space-5);
+    border-bottom: var(--border-hairline) dashed var(--color-border);
   }
-
-  /* Keyboard focus ring on the whole card (the stretched link is the only
-     focusable child). `:has(:focus-visible)` keeps it keyboard-only; the link's
-     own outline is suppressed below so the ring isn't doubled. Uses the
-     surface-aware --color-focus (D3), AA on the cream surface. */
+  /* Keyboard focus ring on the whole row (the stretched link is the only
+     focusable child); the link's own outline is suppressed so it isn't doubled. */
   .card:has(a:focus-visible) {
     outline: var(--border-rule) solid var(--color-focus);
-    outline-offset: 2px;
+    outline-offset: 4px;
+  }
+
+  /* Read-time "ticket" — replaces the hero thumbnail. */
+  .card__ticket {
+    flex: 0 0 92px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-2);
+    background: var(--color-surface);
+    border: var(--border-rule) solid var(--color-text);
+    border-radius: var(--radius-sm);
+    transform: rotate(-1.5deg);
+  }
+  .card__mins {
+    font-family: var(--font-sign);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-h2);
+    line-height: 1;
+    color: var(--color-accent);
+  }
+  .card__mins-u {
+    margin-left: 2px;
+    font-size: var(--fs-meta);
+  }
+  .card__est {
+    margin-top: var(--space-1);
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .card__barcode {
+    width: 100%;
+    height: 16px;
+    margin-top: var(--space-1);
+    background: repeating-linear-gradient(
+      90deg,
+      var(--color-text) 0 2px,
+      transparent 2px 4px,
+      var(--color-text) 4px 5px,
+      transparent 5px 8px
+    );
   }
 
   .card__body {
-    padding: var(--space-5);
+    flex: 1 1 auto;
+    min-width: 0;
   }
-
+  .card__meta {
+    margin: 0 0 var(--space-1);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
   .card__title {
     margin: 0 0 var(--space-2);
     font-family: var(--font-serif);
@@ -85,8 +122,6 @@ const fmt = new Intl.DateTimeFormat('en-US', {
     line-height: var(--lh-snug);
     overflow-wrap: break-word;
   }
-  /* Title is already distinct by size/weight/position, so no default underline;
-     the affordance is the card + hover. Underline appears on hover/focus. */
   .card__title a {
     color: var(--color-text);
     text-decoration: none;
@@ -95,73 +130,36 @@ const fmt = new Intl.DateTimeFormat('en-US', {
   .card__title a:focus-visible {
     text-decoration: underline;
   }
-  /* Card-level ring handles the visible focus; drop the inner link's outline. */
   .card__title a:focus-visible {
     outline: none;
   }
-  /* Stretched link: overlay the whole card so it's all clickable while the title
+  /* Stretched link: overlay the whole row so it's all clickable while the title
      stays the single link in the a11y tree. */
   .card__title a::after {
     content: '';
     position: absolute;
     inset: 0;
   }
-
-  .card__date {
-    display: block;
-    margin-bottom: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: var(--fs-meta);
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-text-muted);
-  }
-
   .card__desc {
     margin: 0;
-    font-family: var(--font-serif);
     color: var(--color-text-muted);
-    /* Clamp to keep card heights even; full text lives on the post page. */
+    /* Clamp to keep rows even; full text lives on the post page. */
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
   }
 
-  /* Hero box: consistent thumbnail regardless of the source ratio. `order: -1`
-     renders it before the body — left on desktop (row), on top on mobile
-     (column). */
-  .card__media {
-    order: -1;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-  }
-  .card__media :global(img) {
-    width: 100%;
-    height: 100%;
-  }
-
-  /* Hover lift — motion only when the user hasn't asked to reduce it. */
-  @media (prefers-reduced-motion: no-preference) {
+  @media (max-width: 30rem) {
     .card {
-      transition:
-        transform var(--duration) var(--ease),
-        box-shadow var(--duration) var(--ease);
+      gap: var(--space-4);
     }
-    .card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0 var(--color-border);
+    .card__ticket {
+      flex-basis: 74px;
     }
-  }
-
-  /* Desktop: thumbnail-left row. */
-  @media (min-width: 40rem) {
-    .card {
-      flex-direction: row;
-    }
-    .card__media {
-      flex: 0 0 34%;
-      aspect-ratio: 4 / 3;
+    .card__mins {
+      font-size: var(--fs-h3);
     }
   }
 </style>
