@@ -1,15 +1,21 @@
 ---
-// Single post — /posts/<slug>/ (MEAT-18, image pipeline reworked by MEAT-41).
+// Single post — /posts/<slug>/ (MEAT-18; reading layout = MEAT-25 / D5).
 //
 // Routes on the collection entry `id` (== slug; MEAT-17). Single-segment param
 // fails loud if a slug ever contains a slash, surfacing bad data rather than
 // silently 404ing (plan v2, fix #5). Drafts are excluded in prod via the same
 // getPublishedPosts() predicate as the home list, so no orphan draft page is
 // ever built (plan v2, fix #1).
-import { Image, getImage } from 'astro:assets';
+//
+// No on-page hero image (D5, 2026-06-30): the article opens on title → dek →
+// meta → prose. `heroImage` stays required in the schema and still feeds the OG
+// card below — only the visual hero element was removed.
+import { getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import EndStamp from '../../components/EndStamp.astro';
 import { getPublishedPosts } from '../../lib/posts';
+import { readingTimeMinutes } from '../../lib/reading-time';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -23,16 +29,23 @@ const { entry } = Astro.props;
 const { title, date, description, heroImage, heroImageAlt, seoTitle, ogImage } =
   entry.data;
 
-// Body renders through <Content /> (MEAT-41): local Markdown images (`![](./x)`)
-// are only run through the sharp pipeline by the content component, not in the
-// raw `rendered.html` string. The leading-body-<h1> demotion that used to live
-// here as a regex now happens at the migration source (MEAT-12), so the page
-// still keeps exactly ONE <h1> (the frontmatter title below).
+// Body renders through <Content /> (MEAT-41): local Markdown images are only run
+// through the sharp pipeline by the content component, not in the raw
+// `rendered.html` string. The leading-body-<h1> demotion that used to live here
+// as a regex now happens at the migration source (MEAT-12), so the page still
+// keeps exactly ONE <h1> (the frontmatter title below).
 const { Content } = await render(entry);
+
+// Reading-time estimate from the raw Markdown body (MEAT-45 helper, reused).
+// Computed here at render time — a remark reading-time plugin would not run
+// under the Satteri pipeline.
+const mins = readingTimeMinutes(entry.body);
 
 // OG card: emit a fixed 1200x630 variant. getImage() both materializes the
 // asset into the build (a meta-only image is otherwise never emitted) and gives
-// us its hashed src, which we make absolute against `site` for crawlers.
+// us its hashed src, which we make absolute against `site` for crawlers. Uses
+// the per-post ogImage or the hero as fallback — independent of the (now absent)
+// on-page hero element.
 const og = await getImage({
   src: ogImage ?? heroImage,
   width: 1200,
@@ -54,11 +67,197 @@ const fmt = new Intl.DateTimeFormat('en-US', {
   ogImageAlt={heroImageAlt}
   ogType="article"
 >
-  <article>
-    <Image src={heroImage} alt={heroImageAlt} loading="eager" />
-    {/* The page's single H1 comes from frontmatter; body h1s are demoted at source. */}
-    <h1>{title}</h1>
-    <time datetime={date.toISOString().slice(0, 10)}>{fmt.format(date)}</time>
-    <Content />
+  <article class="post container">
+    <header class="post__head measure">
+      {/* The page's single H1 comes from frontmatter; body h1s are demoted at source. */}
+      <h1 class="post__title">{title}</h1>
+      <p class="post__dek">{description}</p>
+      <p class="post__meta">
+        <time datetime={date.toISOString().slice(0, 10)}>{fmt.format(date)}</time>
+        <span aria-hidden="true">&middot;</span>
+        <span>{mins} min read</span>
+      </p>
+    </header>
+
+    <div class="prose measure">
+      <Content />
+    </div>
+
+    <EndStamp />
   </article>
 </BaseLayout>
+
+<style>
+  .post {
+    padding-block: var(--space-7) var(--space-8);
+  }
+  /* Center the 720px reading column inside the wider page container. */
+  .post__head,
+  .prose {
+    margin-inline: auto;
+  }
+  .post__head {
+    margin-bottom: var(--space-6);
+  }
+
+  /* --- Article header ----------------------------------------------------- */
+  .post__title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: var(--fw-bold); /* serif built at 400/700 only */
+    font-size: var(--fs-h1);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+  }
+  .post__dek {
+    margin: var(--space-4) 0 0;
+    font-family: var(--font-serif);
+    font-size: var(--fs-lead);
+    line-height: var(--lh-normal);
+    color: var(--color-text-muted);
+  }
+  /* Meta line mirrors the PostCard treatment (mono, uppercase, tracked). */
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* --- Prose (Markdown body) ---------------------------------------------- */
+  /* <Content/> output carries no component scope attribute, so every selector
+     that targets it must be :global(). Body inherits serif/--fs-body/--lh-body
+     from global.css; rules below add rhythm and per-element treatments. */
+  .prose :global(p) {
+    margin: 0 0 var(--space-5);
+  }
+
+  .prose :global(h2),
+  .prose :global(h3),
+  .prose :global(h4) {
+    font-family: var(--font-serif);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-snug);
+    color: var(--color-text);
+  }
+  .prose :global(h2) {
+    margin: var(--space-7) 0 var(--space-4);
+    font-size: var(--fs-h2);
+  }
+  .prose :global(h3) {
+    margin: var(--space-6) 0 var(--space-3);
+    font-size: var(--fs-h3);
+  }
+  /* h4+ kept above body size so deep subheads don't flatten the hierarchy. */
+  .prose :global(h4) {
+    margin: var(--space-5) 0 var(--space-3);
+    font-size: var(--fs-body);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+  /* Note: .prose h1 is deliberately NOT styled — a stray body h1 (source
+     demotion miss) should look wrong rather than impersonate the title. */
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 var(--space-5);
+    padding-left: var(--space-5);
+    line-height: var(--lh-normal);
+  }
+  .prose :global(li + li) {
+    margin-top: var(--space-2);
+  }
+
+  .prose :global(blockquote) {
+    margin: var(--space-6) 0;
+    padding: var(--space-1) 0 var(--space-1) var(--space-5);
+    border-left: var(--border-heavy) solid var(--color-accent-alt);
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+  .prose :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Inline code: no D1 token exists, so a surface chip + hairline outline keeps
+     it legible on cream (a fill alone is near-invisible). Excludes block code. */
+  .prose :global(code:not(pre code)) {
+    padding: 0.1em 0.35em;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-surface);
+    border: var(--border-hairline) solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Fenced code: Shiki `css-variables` theme bridged onto D1 --code-* tokens. */
+  .prose :global(pre.astro-code) {
+    margin: var(--space-6) 0;
+    padding: var(--space-4) var(--space-5);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+    line-height: var(--lh-normal);
+    border-radius: var(--radius-lg);
+
+    --astro-code-background: var(--code-bg);
+    --astro-code-foreground: var(--code-text);
+    --astro-code-token-keyword: var(--code-keyword);
+    --astro-code-token-function: var(--code-function);
+    --astro-code-token-string: var(--code-string);
+    --astro-code-token-string-expression: var(--code-string);
+    --astro-code-token-comment: var(--code-comment);
+    /* Scopes D1 doesn't color → fall back to foreground, not an undefined var. */
+    --astro-code-token-constant: var(--code-text);
+    --astro-code-token-punctuation: var(--code-text);
+    --astro-code-token-parameter: var(--code-text);
+    --astro-code-token-link: var(--code-text);
+  }
+
+  /* Figures / images */
+  .prose :global(img) {
+    display: block;
+    border-radius: var(--radius-lg);
+  }
+  .prose :global(figure) {
+    margin: var(--space-6) 0;
+  }
+  .prose :global(figcaption) {
+    margin-top: var(--space-2);
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  /* Thematic break — brand dashed rule. */
+  .prose :global(hr) {
+    margin: var(--space-7) 0;
+    border: 0;
+    border-top: var(--border-hairline) dashed var(--color-border);
+  }
+
+  /* Tables — defensive; some migrated posts may include one. */
+  .prose :global(table) {
+    width: 100%;
+    margin: var(--space-6) 0;
+    border-collapse: collapse;
+    font-size: var(--fs-small);
+  }
+  .prose :global(th),
+  .prose :global(td) {
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-hairline) solid var(--color-border);
+    text-align: left;
+  }
+  .prose :global(th) {
+    font-family: var(--font-sign);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+</style>
